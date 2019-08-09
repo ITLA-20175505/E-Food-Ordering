@@ -1,0 +1,36 @@
+﻿@model List<E_Food.Models.ViewModels.ListaTabla>
+@{
+    ViewBag.Title = "Mis Datos";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <h2>@ViewBag.Title</h2>
+</head>
+<body>
+    <div class="row" style="text-align:right;padding:5px;">
+        <a href="~/Tabla/Nuevo" class="btn btn-primary"> Nuevo</a>
+        <div class="col-md-12"
+       
+             <table>
+                 <tr>
+                     <th>#</th>
+                     <th>Nombre</th>
+                 </tr>
+        @foreach(var oTipo in Model)
+        {
+            <tr>
+                <td>@oTipo.idTipoAB</td>
+        <td>@oTipo.Nombre</td>
+            </tr>
+        }
+             </table>
+             </div>
+         
+    </div>
+</body>
+</html>

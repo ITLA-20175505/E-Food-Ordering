@@ -1,0 +1,20 @@
+﻿@model E_Food.Models.ViewModels.TablaTipoAB
+@{
+    ViewBag.Title = "Nuevo";
+}
+
+<h2>@ViewBag.Title</h2>
+@using (Html.BeginForm("Nuevo","Tabla",FormMethod.Post))
+{
+    <div class="row">
+        <div class="col-md-12"
+             @Html.LabelFor(d=>d.Nombre)
+             @Html.TextBoxFor(d => d.Nombre, "", new { @class = "form-control"})
+             @Html.ValidationMessageFor(d=>d.Nombre,null,new { @class="red"})
+    <br/>
+        <div style="text-align:right;">
+            <input value="Guardar" class="btn btn-primary" type="submit"/>
+        </div>
+    </div>
+}
+

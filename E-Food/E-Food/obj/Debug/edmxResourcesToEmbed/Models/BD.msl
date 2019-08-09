@@ -1,0 +1,319 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="EFoodModelStoreContainer" CdmEntityContainer="EFood">
+    <EntitySetMapping Name="Detalle_Orden">
+      <EntityTypeMapping TypeName="EFoodModel.Detalle_Orden">
+        <MappingFragment StoreEntitySet="Detalle_Orden">
+          <ScalarProperty Name="idOrden" ColumnName="idOrden" />
+          <ScalarProperty Name="idServicio" ColumnName="idServicio" />
+          <ScalarProperty Name="cantidad" ColumnName="cantidad" />
+        </MappingFragment>
+      </EntityTypeMapping>
+      <EntityTypeMapping TypeName="EFoodModel.Detalle_Orden">
+        <ModificationFunctionMapping>
+          <InsertFunction FunctionName="EFoodModel.Store.crearDetalleOrden">
+            <ScalarProperty Name="cantidad" ParameterName="cantidad" />
+            <ScalarProperty Name="idServicio" ParameterName="idServicio" />
+            <ScalarProperty Name="idOrden" ParameterName="idOrden" />
+            <ResultBinding Name="idOrden" ColumnName="idOrden" />
+            <ResultBinding Name="idServicio" ColumnName="idServicio" />
+          </InsertFunction>
+          <UpdateFunction FunctionName="EFoodModel.Store.editarDetalleOrden">
+            <ScalarProperty Name="cantidad" ParameterName="cantidad" Version="Current" />
+            <ScalarProperty Name="idServicio" ParameterName="idServicio" Version="Current" />
+            <ScalarProperty Name="idOrden" ParameterName="idOrden" Version="Current" />
+          </UpdateFunction>
+          <DeleteFunction FunctionName="EFoodModel.Store.borrarDetalleOrden">
+            <ScalarProperty Name="idServicio" ParameterName="idServicio" />
+            <ScalarProperty Name="idOrden" ParameterName="idOrden" />
+          </DeleteFunction>
+        </ModificationFunctionMapping>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Mesas">
+      <EntityTypeMapping TypeName="EFoodModel.Mesa">
+        <MappingFragment StoreEntitySet="Mesa">
+          <ScalarProperty Name="idMesa" ColumnName="idMesa" />
+          <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+          <ScalarProperty Name="inactive" ColumnName="inactive" />
+        </MappingFragment>
+      </EntityTypeMapping>
+      <EntityTypeMapping TypeName="EFoodModel.Mesa">
+        <ModificationFunctionMapping>
+          <InsertFunction FunctionName="EFoodModel.Store.crearMesa">
+            <ScalarProperty Name="Nombre" ParameterName="nombre" />
+            <ResultBinding Name="idMesa" ColumnName="idMesa" />
+          </InsertFunction>
+          <UpdateFunction FunctionName="EFoodModel.Store.editarMesa">
+            <ScalarProperty Name="Nombre" ParameterName="nombre" Version="Current" />
+            <ScalarProperty Name="idMesa" ParameterName="idMesa" Version="Current" />
+          </UpdateFunction>
+          <DeleteFunction FunctionName="EFoodModel.Store.buscarMesa">
+            <ScalarProperty Name="idMesa" ParameterName="idMesa" />
+          </DeleteFunction>
+        </ModificationFunctionMapping>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Ordens">
+      <EntityTypeMapping TypeName="EFoodModel.Orden">
+        <MappingFragment StoreEntitySet="Orden">
+          <ScalarProperty Name="idOrden" ColumnName="idOrden" />
+          <ScalarProperty Name="idMesa" ColumnName="idMesa" />
+          <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+          <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+          <ScalarProperty Name="inactive" ColumnName="inactive" />
+        </MappingFragment>
+      </EntityTypeMapping>
+      <EntityTypeMapping TypeName="EFoodModel.Orden">
+        <ModificationFunctionMapping>
+          <InsertFunction FunctionName="EFoodModel.Store.crearOrden">
+            <ScalarProperty Name="Fecha" ParameterName="fecha" />
+            <ScalarProperty Name="Descripcion" ParameterName="descripcion" />
+            <ScalarProperty Name="idMesa" ParameterName="idMesa" />
+            <ResultBinding Name="idOrden" ColumnName="idOrden" />
+          </InsertFunction>
+          <UpdateFunction FunctionName="EFoodModel.Store.editarOrden">
+            <ScalarProperty Name="Fecha" ParameterName="fecha" Version="Current" />
+            <ScalarProperty Name="Descripcion" ParameterName="descripcion" Version="Current" />
+            <ScalarProperty Name="idMesa" ParameterName="idMesa" Version="Current" />
+            <ScalarProperty Name="idOrden" ParameterName="idOrden" Version="Current" />
+          </UpdateFunction>
+          <DeleteFunction FunctionName="EFoodModel.Store.borrarOrden">
+            <ScalarProperty Name="idOrden" ParameterName="idOrden" />
+          </DeleteFunction>
+        </ModificationFunctionMapping>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Servicios">
+      <EntityTypeMapping TypeName="EFoodModel.Servicio">
+        <MappingFragment StoreEntitySet="Servicio">
+          <ScalarProperty Name="idServicio" ColumnName="idServicio" />
+          <ScalarProperty Name="idTipoAB" ColumnName="idTipoAB" />
+          <ScalarProperty Name="idTipoServicio" ColumnName="idTipoServicio" />
+          <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+          <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+          <ScalarProperty Name="precio" ColumnName="precio" />
+          <ScalarProperty Name="tiempo" ColumnName="tiempo" />
+          <ScalarProperty Name="imagen" ColumnName="imagen" />
+          <ScalarProperty Name="inactive" ColumnName="inactive" />
+        </MappingFragment>
+      </EntityTypeMapping>
+      <EntityTypeMapping TypeName="EFoodModel.Servicio">
+        <ModificationFunctionMapping>
+          <InsertFunction FunctionName="EFoodModel.Store.crearServicio">
+            <ScalarProperty Name="Nombre" ParameterName="nombre" />
+            <ScalarProperty Name="imagen" ParameterName="imagen" />
+            <ScalarProperty Name="tiempo" ParameterName="tiempo" />
+            <ScalarProperty Name="precio" ParameterName="precio" />
+            <ScalarProperty Name="descripcion" ParameterName="descripcion" />
+            <ScalarProperty Name="idTipoServicio" ParameterName="idTipoServicio" />
+            <ScalarProperty Name="idTipoAB" ParameterName="idTipoAB" />
+            <ResultBinding Name="idServicio" ColumnName="idServicio" />
+          </InsertFunction>
+          <UpdateFunction FunctionName="EFoodModel.Store.editarServicio">
+            <ScalarProperty Name="Nombre" ParameterName="nombre" Version="Current" />
+            <ScalarProperty Name="imagen" ParameterName="imagen" Version="Current" />
+            <ScalarProperty Name="tiempo" ParameterName="tiempo" Version="Current" />
+            <ScalarProperty Name="precio" ParameterName="precio" Version="Current" />
+            <ScalarProperty Name="descripcion" ParameterName="descripcion" Version="Current" />
+            <ScalarProperty Name="idTipoServicio" ParameterName="idTipoServicio" Version="Current" />
+            <ScalarProperty Name="idTipoAB" ParameterName="idTipoAB" Version="Current" />
+            <ScalarProperty Name="idServicio" ParameterName="idServicio" Version="Current" />
+          </UpdateFunction>
+          <DeleteFunction FunctionName="EFoodModel.Store.borrarServicio">
+            <ScalarProperty Name="idServicio" ParameterName="idServicio" />
+          </DeleteFunction>
+        </ModificationFunctionMapping>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TipoABs">
+      <EntityTypeMapping TypeName="EFoodModel.TipoAB">
+        <MappingFragment StoreEntitySet="TipoAB">
+          <ScalarProperty Name="idTipo" ColumnName="idTipo" />
+          <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+          <ScalarProperty Name="inactive" ColumnName="inactive" />
+        </MappingFragment>
+      </EntityTypeMapping>
+      <EntityTypeMapping TypeName="EFoodModel.TipoAB">
+        <ModificationFunctionMapping>
+          <InsertFunction FunctionName="EFoodModel.Store.crearTipoAB">
+            <ScalarProperty Name="Nombre" ParameterName="nombre" />
+            <ResultBinding Name="idTipo" ColumnName="idTipoAB" />
+          </InsertFunction>
+          <UpdateFunction FunctionName="EFoodModel.Store.editarTipoAB">
+            <ScalarProperty Name="Nombre" ParameterName="nombre" Version="Current" />
+            <ScalarProperty Name="idTipo" ParameterName="idTipoAB" Version="Current" />
+          </UpdateFunction>
+          <DeleteFunction FunctionName="EFoodModel.Store.borrarTipoAB">
+            <ScalarProperty Name="idTipo" ParameterName="idTipoAB" />
+          </DeleteFunction>
+        </ModificationFunctionMapping>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TipoServicios">
+      <EntityTypeMapping TypeName="EFoodModel.TipoServicio">
+        <MappingFragment StoreEntitySet="TipoServicio">
+          <ScalarProperty Name="idTipoServicio" ColumnName="idTipoServicio" />
+          <ScalarProperty Name="idTipoAB" ColumnName="idTipoAB" />
+          <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+          <ScalarProperty Name="inactive" ColumnName="inactive" />
+        </MappingFragment>
+      </EntityTypeMapping>
+      <EntityTypeMapping TypeName="EFoodModel.TipoServicio">
+        <ModificationFunctionMapping>
+          <InsertFunction FunctionName="EFoodModel.Store.crearTipoServicio">
+            <ScalarProperty Name="Nombre" ParameterName="nombre" />
+            <ScalarProperty Name="idTipoAB" ParameterName="idTipoAB" />
+            <ResultBinding Name="idTipoServicio" ColumnName="idTipoServicio" />
+          </InsertFunction>
+          <UpdateFunction FunctionName="EFoodModel.Store.editarTipoServicio">
+            <ScalarProperty Name="Nombre" ParameterName="nombre" Version="Current" />
+            <ScalarProperty Name="idTipoAB" ParameterName="idTipoAB" Version="Current" />
+            <ScalarProperty Name="idTipoServicio" ParameterName="idTipoServicio" Version="Current" />
+          </UpdateFunction>
+          <DeleteFunction FunctionName="EFoodModel.Store.borrarTipoServicio">
+            <ScalarProperty Name="idTipoServicio" ParameterName="idTipoServicio" />
+          </DeleteFunction>
+        </ModificationFunctionMapping>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="borrarDetalleOrden" FunctionName="EFoodModel.Store.borrarDetalleOrden" />
+    <FunctionImportMapping FunctionImportName="borrarMesa" FunctionName="EFoodModel.Store.borrarMesa" />
+    <FunctionImportMapping FunctionImportName="borrarOrden" FunctionName="EFoodModel.Store.borrarOrden" />
+    <FunctionImportMapping FunctionImportName="borrarServicio" FunctionName="EFoodModel.Store.borrarServicio" />
+    <FunctionImportMapping FunctionImportName="borrarTipoAB" FunctionName="EFoodModel.Store.borrarTipoAB" />
+    <FunctionImportMapping FunctionImportName="borrarTipoServicio" FunctionName="EFoodModel.Store.borrarTipoServicio" />
+    <FunctionImportMapping FunctionImportName="buscarDetalleOrden" FunctionName="EFoodModel.Store.buscarDetalleOrden">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="EFoodModel.buscarDetalleOrden_Result">
+          <ScalarProperty Name="idOrden" ColumnName="idOrden" />
+          <ScalarProperty Name="idServicio" ColumnName="idServicio" />
+          <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+          <ScalarProperty Name="precio" ColumnName="precio" />
+          <ScalarProperty Name="cantidad" ColumnName="cantidad" />
+          <ScalarProperty Name="Total" ColumnName="Total" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="buscarMesa" FunctionName="EFoodModel.Store.buscarMesa">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="EFoodModel.buscarMesa_Result">
+          <ScalarProperty Name="idMesa" ColumnName="idMesa" />
+          <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+          <ScalarProperty Name="inactive" ColumnName="inactive" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="buscarOrden" FunctionName="EFoodModel.Store.buscarOrden">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="EFoodModel.buscarOrden_Result">
+          <ScalarProperty Name="idOrden" ColumnName="idOrden" />
+          <ScalarProperty Name="idMesa" ColumnName="idMesa" />
+          <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+          <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+          <ScalarProperty Name="fecha" ColumnName="fecha" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="buscarServicio" FunctionName="EFoodModel.Store.buscarServicio">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="EFoodModel.buscarServicio_Result">
+          <ScalarProperty Name="idServicio" ColumnName="idServicio" />
+          <ScalarProperty Name="idTipo" ColumnName="idTipo" />
+          <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+          <ScalarProperty Name="idTipoAB" ColumnName="idTipoAB" />
+          <ScalarProperty Name="Nombre1" ColumnName="Nombre1" />
+          <ScalarProperty Name="Nombre2" ColumnName="Nombre2" />
+          <ScalarProperty Name="precio" ColumnName="precio" />
+          <ScalarProperty Name="tiempo" ColumnName="tiempo" />
+          <ScalarProperty Name="imagen" ColumnName="imagen" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="buscarTipoAB" FunctionName="EFoodModel.Store.buscarTipoAB">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="EFoodModel.buscarTipoAB_Result">
+          <ScalarProperty Name="idTipo" ColumnName="idTipo" />
+          <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+          <ScalarProperty Name="inactive" ColumnName="inactive" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="buscarTipoServicio" FunctionName="EFoodModel.Store.buscarTipoServicio">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="EFoodModel.buscarTipoServicio_Result">
+          <ScalarProperty Name="idTipo" ColumnName="idTipo" />
+          <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+          <ScalarProperty Name="idTipoServicio" ColumnName="idTipoServicio" />
+          <ScalarProperty Name="Nombre1" ColumnName="Nombre1" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="crearDetalleOrden" FunctionName="EFoodModel.Store.crearDetalleOrden" />
+    <FunctionImportMapping FunctionImportName="crearMesa" FunctionName="EFoodModel.Store.crearMesa" />
+    <FunctionImportMapping FunctionImportName="crearOrden" FunctionName="EFoodModel.Store.crearOrden" />
+    <FunctionImportMapping FunctionImportName="crearServicio" FunctionName="EFoodModel.Store.crearServicio" />
+    <FunctionImportMapping FunctionImportName="crearTipoAB" FunctionName="EFoodModel.Store.crearTipoAB" />
+    <FunctionImportMapping FunctionImportName="crearTipoServicio" FunctionName="EFoodModel.Store.crearTipoServicio" />
+    <FunctionImportMapping FunctionImportName="editarDetalleOrden" FunctionName="EFoodModel.Store.editarDetalleOrden" />
+    <FunctionImportMapping FunctionImportName="editarMesa" FunctionName="EFoodModel.Store.editarMesa" />
+    <FunctionImportMapping FunctionImportName="editarOrden" FunctionName="EFoodModel.Store.editarOrden" />
+    <FunctionImportMapping FunctionImportName="editarServicio" FunctionName="EFoodModel.Store.editarServicio" />
+    <FunctionImportMapping FunctionImportName="editarTipoAB" FunctionName="EFoodModel.Store.editarTipoAB" />
+    <FunctionImportMapping FunctionImportName="editarTipoServicio" FunctionName="EFoodModel.Store.editarTipoServicio" />
+    <FunctionImportMapping FunctionImportName="verMesa" FunctionName="EFoodModel.Store.verMesa">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="EFoodModel.verMesa_Result">
+          <ScalarProperty Name="idMesa" ColumnName="idMesa" />
+          <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+          <ScalarProperty Name="inactive" ColumnName="inactive" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="verOrden" FunctionName="EFoodModel.Store.verOrden">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="EFoodModel.verOrden_Result">
+          <ScalarProperty Name="idOrden" ColumnName="idOrden" />
+          <ScalarProperty Name="idMesa" ColumnName="idMesa" />
+          <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+          <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+          <ScalarProperty Name="fecha" ColumnName="fecha" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="verServicio" FunctionName="EFoodModel.Store.verServicio">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="EFoodModel.verServicio_Result">
+          <ScalarProperty Name="idServicio" ColumnName="idServicio" />
+          <ScalarProperty Name="idTipo" ColumnName="idTipo" />
+          <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+          <ScalarProperty Name="idTipoAB" ColumnName="idTipoAB" />
+          <ScalarProperty Name="Nombre1" ColumnName="Nombre1" />
+          <ScalarProperty Name="Nombre2" ColumnName="Nombre2" />
+          <ScalarProperty Name="precio" ColumnName="precio" />
+          <ScalarProperty Name="tiempo" ColumnName="tiempo" />
+          <ScalarProperty Name="imagen" ColumnName="imagen" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="verTipoAB" FunctionName="EFoodModel.Store.verTipoAB">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="EFoodModel.verTipoAB_Result">
+          <ScalarProperty Name="idTipo" ColumnName="idTipo" />
+          <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+          <ScalarProperty Name="inactive" ColumnName="inactive" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="verTipoServicio" FunctionName="EFoodModel.Store.verTipoServicio">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="EFoodModel.verTipoServicio_Result">
+          <ScalarProperty Name="idTipo" ColumnName="idTipo" />
+          <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+          <ScalarProperty Name="idTipoServicio" ColumnName="idTipoServicio" />
+          <ScalarProperty Name="Nombre1" ColumnName="Nombre1" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+  </EntityContainerMapping>
+</Mapping>

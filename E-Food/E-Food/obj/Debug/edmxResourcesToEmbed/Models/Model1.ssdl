@@ -1,0 +1,255 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="EFoodModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Detalle_Orden">
+    <Key>
+      <PropertyRef Name="idOrden" />
+      <PropertyRef Name="idServicio" />
+    </Key>
+    <Property Name="idOrden" Type="int" Nullable="false" />
+    <Property Name="idServicio" Type="int" Nullable="false" />
+    <Property Name="cantidad" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Mesa">
+    <Key>
+      <PropertyRef Name="idMesa" />
+    </Key>
+    <Property Name="idMesa" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="nombreMesa" Type="varchar" MaxLength="25" />
+    <Property Name="inactive" Type="bit" />
+  </EntityType>
+  <EntityType Name="Orden">
+    <Key>
+      <PropertyRef Name="idOrden" />
+    </Key>
+    <Property Name="idOrden" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="idMesa" Type="int" Nullable="false" />
+    <Property Name="descripcion" Type="text" />
+    <Property Name="fecha" Type="datetime" />
+    <Property Name="inactive" Type="bit" />
+  </EntityType>
+  <EntityType Name="Servicio">
+    <Key>
+      <PropertyRef Name="idServicio" />
+    </Key>
+    <Property Name="idServicio" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="idTipoAB" Type="int" Nullable="false" />
+    <Property Name="idTipoServicio" Type="int" />
+    <Property Name="nombreServicio" Type="varchar" MaxLength="50" />
+    <Property Name="descripcion" Type="text" />
+    <Property Name="precio" Type="float" />
+    <Property Name="tiempo" Type="int" />
+    <Property Name="imagen" Type="text" />
+    <Property Name="inactive" Type="bit" />
+  </EntityType>
+  <EntityType Name="TipoAB">
+    <Key>
+      <PropertyRef Name="idTipo" />
+    </Key>
+    <Property Name="idTipo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="nombreAB" Type="varchar" MaxLength="25" Nullable="false" />
+    <Property Name="inactive" Type="bit" />
+  </EntityType>
+  <EntityType Name="TipoServicio">
+    <Key>
+      <PropertyRef Name="idTipoServicio" />
+    </Key>
+    <Property Name="idTipoServicio" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="idTipoAB" Type="int" Nullable="false" />
+    <Property Name="nombreTS" Type="varchar" MaxLength="25" Nullable="false" />
+    <Property Name="inactive" Type="bit" />
+  </EntityType>
+  <Association Name="fk_DetalleOrden_idServicio">
+    <End Role="Servicio" Type="Self.Servicio" Multiplicity="1" />
+    <End Role="Detalle_Orden" Type="Self.Detalle_Orden" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Servicio">
+        <PropertyRef Name="idServicio" />
+      </Principal>
+      <Dependent Role="Detalle_Orden">
+        <PropertyRef Name="idServicio" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_Orden_Mesa">
+    <End Role="Mesa" Type="Self.Mesa" Multiplicity="1" />
+    <End Role="Orden" Type="Self.Orden" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Mesa">
+        <PropertyRef Name="idMesa" />
+      </Principal>
+      <Dependent Role="Orden">
+        <PropertyRef Name="idMesa" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_Servicio_TipoAB">
+    <End Role="TipoAB" Type="Self.TipoAB" Multiplicity="1" />
+    <End Role="Servicio" Type="Self.Servicio" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TipoAB">
+        <PropertyRef Name="idTipo" />
+      </Principal>
+      <Dependent Role="Servicio">
+        <PropertyRef Name="idTipoAB" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_Servicio_TipoServicio">
+    <End Role="TipoServicio" Type="Self.TipoServicio" Multiplicity="0..1" />
+    <End Role="Servicio" Type="Self.Servicio" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TipoServicio">
+        <PropertyRef Name="idTipoServicio" />
+      </Principal>
+      <Dependent Role="Servicio">
+        <PropertyRef Name="idTipoServicio" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_TipoComida_TipoAB">
+    <End Role="TipoAB" Type="Self.TipoAB" Multiplicity="1" />
+    <End Role="TipoServicio" Type="Self.TipoServicio" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TipoAB">
+        <PropertyRef Name="idTipo" />
+      </Principal>
+      <Dependent Role="TipoServicio">
+        <PropertyRef Name="idTipoAB" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Function Name="borrarDetalleOrden" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="idOrden" Type="int" Mode="In" />
+    <Parameter Name="idServicio" Type="int" Mode="In" />
+  </Function>
+  <Function Name="borrarMesa" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="idMesa" Type="int" Mode="In" />
+  </Function>
+  <Function Name="borrarOrden" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="idOrden" Type="int" Mode="In" />
+  </Function>
+  <Function Name="borrarServicio" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="idServicio" Type="int" Mode="In" />
+  </Function>
+  <Function Name="borrarTipoAB" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="idTipoAB" Type="int" Mode="In" />
+  </Function>
+  <Function Name="borrarTipoServicio" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="idTipoServicio" Type="int" Mode="In" />
+  </Function>
+  <Function Name="buscarDetalleOrden" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="idOrden" Type="int" Mode="In" />
+  </Function>
+  <Function Name="buscarMesa" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="idMesa" Type="int" Mode="In" />
+  </Function>
+  <Function Name="buscarOrden" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="idOrden" Type="int" Mode="In" />
+  </Function>
+  <Function Name="buscarServicio" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="idServicio" Type="int" Mode="In" />
+  </Function>
+  <Function Name="buscarTipoAB" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="idTipoAB" Type="int" Mode="In" />
+  </Function>
+  <Function Name="buscarTipoServicio" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="idTipoServicio" Type="int" Mode="In" />
+  </Function>
+  <Function Name="crearDetalleOrden" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="idOrden" Type="int" Mode="In" />
+    <Parameter Name="idServicio" Type="int" Mode="In" />
+    <Parameter Name="cantidad" Type="int" Mode="In" />
+  </Function>
+  <Function Name="crearMesa" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="nombre" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="crearOrden" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="idMesa" Type="int" Mode="In" />
+    <Parameter Name="descripcion" Type="text" Mode="In" />
+    <Parameter Name="fecha" Type="time" Mode="In" />
+  </Function>
+  <Function Name="crearServicio" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="idTipoAB" Type="int" Mode="In" />
+    <Parameter Name="idTipoServicio" Type="int" Mode="In" />
+    <Parameter Name="nombre" Type="varchar" Mode="In" />
+    <Parameter Name="descripcion" Type="text" Mode="In" />
+    <Parameter Name="precio" Type="float" Mode="In" />
+    <Parameter Name="tiempo" Type="int" Mode="In" />
+    <Parameter Name="imagen" Type="text" Mode="In" />
+  </Function>
+  <Function Name="crearTipoAB" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="nombre" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="crearTipoServicio" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="idTipoAB" Type="int" Mode="In" />
+    <Parameter Name="nombre" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="editarDetalleOrden" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="idOrden" Type="int" Mode="In" />
+    <Parameter Name="idServicio" Type="int" Mode="In" />
+    <Parameter Name="cantidad" Type="int" Mode="In" />
+  </Function>
+  <Function Name="editarMesa" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="idMesa" Type="int" Mode="In" />
+    <Parameter Name="nombre" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="editarOrden" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="idOrden" Type="int" Mode="In" />
+    <Parameter Name="idMesa" Type="int" Mode="In" />
+    <Parameter Name="descripcion" Type="text" Mode="In" />
+    <Parameter Name="fecha" Type="datetime" Mode="In" />
+  </Function>
+  <Function Name="editarServicio" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="idServicio" Type="int" Mode="In" />
+    <Parameter Name="idTipoAB" Type="int" Mode="In" />
+    <Parameter Name="idTipoServicio" Type="int" Mode="In" />
+    <Parameter Name="nombre" Type="varchar" Mode="In" />
+    <Parameter Name="descripcion" Type="text" Mode="In" />
+    <Parameter Name="precio" Type="float" Mode="In" />
+    <Parameter Name="tiempo" Type="int" Mode="In" />
+    <Parameter Name="imagen" Type="text" Mode="In" />
+  </Function>
+  <Function Name="editarTipoAB" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="idTipoAB" Type="int" Mode="In" />
+    <Parameter Name="nombre" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="editarTipoServicio" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="idTipoServicio" Type="int" Mode="In" />
+    <Parameter Name="idTipoAB" Type="int" Mode="In" />
+    <Parameter Name="nombre" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="verDetalleOrden" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="verMesa" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="verOrden" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="verServicio" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="verTipoAB" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="verTipoServicio" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <EntityContainer Name="EFoodModelStoreContainer">
+    <EntitySet Name="Detalle_Orden" EntityType="Self.Detalle_Orden" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Mesa" EntityType="Self.Mesa" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Orden" EntityType="Self.Orden" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Servicio" EntityType="Self.Servicio" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="TipoAB" EntityType="Self.TipoAB" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="TipoServicio" EntityType="Self.TipoServicio" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="fk_DetalleOrden_idServicio" Association="Self.fk_DetalleOrden_idServicio">
+      <End Role="Servicio" EntitySet="Servicio" />
+      <End Role="Detalle_Orden" EntitySet="Detalle_Orden" />
+    </AssociationSet>
+    <AssociationSet Name="fk_Orden_Mesa" Association="Self.fk_Orden_Mesa">
+      <End Role="Mesa" EntitySet="Mesa" />
+      <End Role="Orden" EntitySet="Orden" />
+    </AssociationSet>
+    <AssociationSet Name="fk_Servicio_TipoAB" Association="Self.fk_Servicio_TipoAB">
+      <End Role="TipoAB" EntitySet="TipoAB" />
+      <End Role="Servicio" EntitySet="Servicio" />
+    </AssociationSet>
+    <AssociationSet Name="fk_Servicio_TipoServicio" Association="Self.fk_Servicio_TipoServicio">
+      <End Role="TipoServicio" EntitySet="TipoServicio" />
+      <End Role="Servicio" EntitySet="Servicio" />
+    </AssociationSet>
+    <AssociationSet Name="fk_TipoComida_TipoAB" Association="Self.fk_TipoComida_TipoAB">
+      <End Role="TipoAB" EntitySet="TipoAB" />
+      <End Role="TipoServicio" EntitySet="TipoServicio" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
