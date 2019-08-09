@@ -23,7 +23,7 @@ namespace E_Food.Models
         public int idServicio { get; set; }
         public int idTipoAB { get; set; }
         public Nullable<int> idTipoServicio { get; set; }
-        public string Nombre { get; set; }
+        public string nombreServicio { get; set; }
         public string descripcion { get; set; }
         public Nullable<double> precio { get; set; }
         public Nullable<int> tiempo { get; set; }

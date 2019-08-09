@@ -18,6 +18,7 @@ namespace E_Food.Models
         public int idServicio { get; set; }
         public int cantidad { get; set; }
     
+        public virtual Orden Orden { get; set; }
         public virtual Servicio Servicio { get; set; }
     }
 }

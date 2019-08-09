@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="EFoodModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="EFoodModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Detalle_Orden">
           <Key>
             <PropertyRef Name="idOrden" />
@@ -19,7 +19,7 @@
             <PropertyRef Name="idMesa" />
           </Key>
           <Property Name="idMesa" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Nombre" Type="varchar" MaxLength="25" />
+          <Property Name="nombreMesa" Type="varchar" MaxLength="25" />
           <Property Name="inactive" Type="bit" />
         </EntityType>
         <EntityType Name="Orden">
@@ -39,7 +39,7 @@
           <Property Name="idServicio" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="idTipoAB" Type="int" Nullable="false" />
           <Property Name="idTipoServicio" Type="int" />
-          <Property Name="Nombre" Type="varchar" MaxLength="50" />
+          <Property Name="nombreServicio" Type="varchar" MaxLength="50" />
           <Property Name="descripcion" Type="text" />
           <Property Name="precio" Type="float" />
           <Property Name="tiempo" Type="int" />
@@ -48,10 +48,10 @@
         </EntityType>
         <EntityType Name="TipoAB">
           <Key>
-            <PropertyRef Name="idTipo" />
+            <PropertyRef Name="idTipoAB" />
           </Key>
-          <Property Name="idTipo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Nombre" Type="varchar" MaxLength="25" Nullable="false" />
+          <Property Name="idTipoAB" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nombreAB" Type="varchar" MaxLength="25" Nullable="false" />
           <Property Name="inactive" Type="bit" />
         </EntityType>
         <EntityType Name="TipoServicio">
@@ -60,9 +60,21 @@
           </Key>
           <Property Name="idTipoServicio" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="idTipoAB" Type="int" Nullable="false" />
-          <Property Name="Nombre" Type="varchar" MaxLength="25" Nullable="false" />
+          <Property Name="nombreTS" Type="varchar" MaxLength="25" Nullable="false" />
           <Property Name="inactive" Type="bit" />
         </EntityType>
+        <Association Name="fk_DetalleOrden_idOrden">
+          <End Role="Orden" Type="Self.Orden" Multiplicity="1" />
+          <End Role="Detalle_Orden" Type="Self.Detalle_Orden" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Orden">
+              <PropertyRef Name="idOrden" />
+            </Principal>
+            <Dependent Role="Detalle_Orden">
+              <PropertyRef Name="idOrden" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="fk_DetalleOrden_idServicio">
           <End Role="Servicio" Type="Self.Servicio" Multiplicity="1" />
           <End Role="Detalle_Orden" Type="Self.Detalle_Orden" Multiplicity="*" />
@@ -92,7 +104,7 @@
           <End Role="Servicio" Type="Self.Servicio" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="TipoAB">
-              <PropertyRef Name="idTipo" />
+              <PropertyRef Name="idTipoAB" />
             </Principal>
             <Dependent Role="Servicio">
               <PropertyRef Name="idTipoAB" />
@@ -116,7 +128,7 @@
           <End Role="TipoServicio" Type="Self.TipoServicio" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="TipoAB">
-              <PropertyRef Name="idTipo" />
+              <PropertyRef Name="idTipoAB" />
             </Principal>
             <Dependent Role="TipoServicio">
               <PropertyRef Name="idTipoAB" />
@@ -223,6 +235,13 @@
           <Parameter Name="idTipoAB" Type="int" Mode="In" />
           <Parameter Name="nombre" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="filtroServicioAB" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idTipoAB" Type="int" Mode="In" />
+        </Function>
+        <Function Name="filtroServicioTS" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idTipoServicio" Type="int" Mode="In" />
+        </Function>
+        <Function Name="verDetalleOrden" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="verMesa" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="verOrden" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="verServicio" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
@@ -235,6 +254,10 @@
           <EntitySet Name="Servicio" EntityType="Self.Servicio" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TipoAB" EntityType="Self.TipoAB" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TipoServicio" EntityType="Self.TipoServicio" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="fk_DetalleOrden_idOrden" Association="Self.fk_DetalleOrden_idOrden">
+            <End Role="Orden" EntitySet="Orden" />
+            <End Role="Detalle_Orden" EntitySet="Detalle_Orden" />
+          </AssociationSet>
           <AssociationSet Name="fk_DetalleOrden_idServicio" Association="Self.fk_DetalleOrden_idServicio">
             <End Role="Servicio" EntitySet="Servicio" />
             <End Role="Detalle_Orden" EntitySet="Detalle_Orden" />
@@ -256,8 +279,7 @@
             <End Role="TipoServicio" EntitySet="TipoServicio" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="EFoodModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -269,6 +291,7 @@
           <Property Name="idOrden" Type="Int32" Nullable="false" />
           <Property Name="idServicio" Type="Int32" Nullable="false" />
           <Property Name="cantidad" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Orden" Relationship="Self.fk_DetalleOrden_idOrden" FromRole="Detalle_Orden" ToRole="Orden" />
           <NavigationProperty Name="Servicio" Relationship="Self.fk_DetalleOrden_idServicio" FromRole="Detalle_Orden" ToRole="Servicio" />
         </EntityType>
         <EntityType Name="Mesa">
@@ -276,7 +299,7 @@
             <PropertyRef Name="idMesa" />
           </Key>
           <Property Name="idMesa" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Nombre" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="nombreMesa" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
           <Property Name="inactive" Type="Boolean" />
           <NavigationProperty Name="Ordens" Relationship="Self.fk_Orden_Mesa" FromRole="Mesa" ToRole="Orden" />
         </EntityType>
@@ -289,6 +312,7 @@
           <Property Name="Descripcion" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="Fecha" Type="DateTime" Precision="3" />
           <Property Name="inactive" Type="Boolean" />
+          <NavigationProperty Name="Detalle_Orden" Relationship="Self.fk_DetalleOrden_idOrden" FromRole="Orden" ToRole="Detalle_Orden" />
           <NavigationProperty Name="Mesa" Relationship="Self.fk_Orden_Mesa" FromRole="Orden" ToRole="Mesa" />
         </EntityType>
         <EntityType Name="Servicio">
@@ -298,7 +322,7 @@
           <Property Name="idServicio" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="idTipoAB" Type="Int32" Nullable="false" />
           <Property Name="idTipoServicio" Type="Int32" />
-          <Property Name="Nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="nombreServicio" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="descripcion" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="precio" Type="Double" />
           <Property Name="tiempo" Type="Int32" />
@@ -310,10 +334,10 @@
         </EntityType>
         <EntityType Name="TipoAB">
           <Key>
-            <PropertyRef Name="idTipo" />
+            <PropertyRef Name="idTipoAB" />
           </Key>
-          <Property Name="idTipo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Nombre" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="idTipoAB" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nombreAB" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="inactive" Type="Boolean" />
           <NavigationProperty Name="Servicios" Relationship="Self.fk_Servicio_TipoAB" FromRole="TipoAB" ToRole="Servicio" />
           <NavigationProperty Name="TipoServicios" Relationship="Self.fk_TipoComida_TipoAB" FromRole="TipoAB" ToRole="TipoServicio" />
@@ -324,11 +348,23 @@
           </Key>
           <Property Name="idTipoServicio" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="idTipoAB" Type="Int32" Nullable="false" />
-          <Property Name="Nombre" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="nombreTS" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="inactive" Type="Boolean" />
           <NavigationProperty Name="Servicios" Relationship="Self.fk_Servicio_TipoServicio" FromRole="TipoServicio" ToRole="Servicio" />
           <NavigationProperty Name="TipoAB" Relationship="Self.fk_TipoComida_TipoAB" FromRole="TipoServicio" ToRole="TipoAB" />
         </EntityType>
+        <Association Name="fk_DetalleOrden_idOrden">
+          <End Role="Orden" Type="Self.Orden" Multiplicity="1" />
+          <End Role="Detalle_Orden" Type="Self.Detalle_Orden" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Orden">
+              <PropertyRef Name="idOrden" />
+            </Principal>
+            <Dependent Role="Detalle_Orden">
+              <PropertyRef Name="idOrden" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="fk_DetalleOrden_idServicio">
           <End Role="Servicio" Type="Self.Servicio" Multiplicity="1" />
           <End Role="Detalle_Orden" Type="Self.Detalle_Orden" Multiplicity="*" />
@@ -358,7 +394,7 @@
           <End Role="Servicio" Type="Self.Servicio" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="TipoAB">
-              <PropertyRef Name="idTipo" />
+              <PropertyRef Name="idTipoAB" />
             </Principal>
             <Dependent Role="Servicio">
               <PropertyRef Name="idTipoAB" />
@@ -382,7 +418,7 @@
           <End Role="TipoServicio" Type="Self.TipoServicio" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="TipoAB">
-              <PropertyRef Name="idTipo" />
+              <PropertyRef Name="idTipoAB" />
             </Principal>
             <Dependent Role="TipoServicio">
               <PropertyRef Name="idTipoAB" />
@@ -396,6 +432,10 @@
           <EntitySet Name="Servicios" EntityType="Self.Servicio" />
           <EntitySet Name="TipoABs" EntityType="Self.TipoAB" />
           <EntitySet Name="TipoServicios" EntityType="Self.TipoServicio" />
+          <AssociationSet Name="fk_DetalleOrden_idOrden" Association="Self.fk_DetalleOrden_idOrden">
+            <End Role="Orden" EntitySet="Ordens" />
+            <End Role="Detalle_Orden" EntitySet="Detalle_Orden" />
+          </AssociationSet>
           <AssociationSet Name="fk_DetalleOrden_idServicio" Association="Self.fk_DetalleOrden_idServicio">
             <End Role="Servicio" EntitySet="Servicios" />
             <End Role="Detalle_Orden" EntitySet="Detalle_Orden" />
@@ -421,37 +461,37 @@
             <Parameter Name="idServicio" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="borrarMesa">
-            <Parameter Name="idMesa" Mode="In" Type="Int32" />
+          <Parameter Name="idMesa" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="borrarOrden">
-            <Parameter Name="idOrden" Mode="In" Type="Int32" />
+          <Parameter Name="idOrden" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="borrarServicio">
-            <Parameter Name="idServicio" Mode="In" Type="Int32" />
+          <Parameter Name="idServicio" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="borrarTipoAB">
-            <Parameter Name="idTipoAB" Mode="In" Type="Int32" />
+          <Parameter Name="idTipoAB" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="borrarTipoServicio">
-            <Parameter Name="idTipoServicio" Mode="In" Type="Int32" />
+          <Parameter Name="idTipoServicio" Mode="In" Type="Int32" />
           </FunctionImport>
-          <FunctionImport Name="buscarDetalleOrden" ReturnType="Collection(EFoodModel.buscarDetalleOrden_Result)">
-            <Parameter Name="idOrden" Mode="In" Type="Int32" />
+          <FunctionImport Name="buscarDetalleOrden" EntitySet="Detalle_Orden" ReturnType="Collection(EFoodModel.Detalle_Orden)">
+          <Parameter Name="idOrden" Mode="In" Type="Int32" />
           </FunctionImport>
-          <FunctionImport Name="buscarMesa" ReturnType="Collection(EFoodModel.buscarMesa_Result)">
-            <Parameter Name="idMesa" Mode="In" Type="Int32" />
+          <FunctionImport Name="buscarMesa" EntitySet="Mesas" ReturnType="Collection(EFoodModel.Mesa)">
+          <Parameter Name="idMesa" Mode="In" Type="Int32" />
           </FunctionImport>
-          <FunctionImport Name="buscarOrden" ReturnType="Collection(EFoodModel.buscarOrden_Result)">
-            <Parameter Name="idOrden" Mode="In" Type="Int32" />
+          <FunctionImport Name="buscarOrden" EntitySet="Ordens" ReturnType="Collection(EFoodModel.Orden)">
+          <Parameter Name="idOrden" Mode="In" Type="Int32" />
           </FunctionImport>
-          <FunctionImport Name="buscarServicio" ReturnType="Collection(EFoodModel.buscarServicio_Result)">
-            <Parameter Name="idServicio" Mode="In" Type="Int32" />
+          <FunctionImport Name="buscarServicio" EntitySet="Servicios" ReturnType="Collection(EFoodModel.Servicio)">
+          <Parameter Name="idServicio" Mode="In" Type="Int32" />
           </FunctionImport>
-          <FunctionImport Name="buscarTipoAB" ReturnType="Collection(EFoodModel.buscarTipoAB_Result)">
-            <Parameter Name="idTipoAB" Mode="In" Type="Int32" />
+          <FunctionImport Name="buscarTipoAB" EntitySet="TipoABs" ReturnType="Collection(EFoodModel.TipoAB)">
+          <Parameter Name="idTipoAB" Mode="In" Type="Int32" />
           </FunctionImport>
-          <FunctionImport Name="buscarTipoServicio" ReturnType="Collection(EFoodModel.buscarTipoServicio_Result)">
-            <Parameter Name="idTipoServicio" Mode="In" Type="Int32" />
+          <FunctionImport Name="buscarTipoServicio" EntitySet="TipoServicios" ReturnType="Collection(EFoodModel.TipoServicio)">
+          <Parameter Name="idTipoServicio" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="crearDetalleOrden">
             <Parameter Name="idOrden" Mode="In" Type="Int32" />
@@ -459,7 +499,7 @@
             <Parameter Name="cantidad" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="crearMesa">
-            <Parameter Name="nombre" Mode="In" Type="String" />
+          <Parameter Name="nombre" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="crearOrden">
             <Parameter Name="idMesa" Mode="In" Type="Int32" />
@@ -476,7 +516,7 @@
             <Parameter Name="imagen" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="crearTipoAB">
-            <Parameter Name="nombre" Mode="In" Type="String" />
+          <Parameter Name="nombre" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="crearTipoServicio">
             <Parameter Name="idTipoAB" Mode="In" Type="Int32" />
@@ -516,87 +556,139 @@
             <Parameter Name="idTipoAB" Mode="In" Type="Int32" />
             <Parameter Name="nombre" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="verDetalleOrden" ReturnType="Collection(EFoodModel.verDetalleOrden_Result)" />
           <FunctionImport Name="verMesa" ReturnType="Collection(EFoodModel.verMesa_Result)" />
           <FunctionImport Name="verOrden" ReturnType="Collection(EFoodModel.verOrden_Result)" />
           <FunctionImport Name="verServicio" ReturnType="Collection(EFoodModel.verServicio_Result)" />
           <FunctionImport Name="verTipoAB" ReturnType="Collection(EFoodModel.verTipoAB_Result)" />
           <FunctionImport Name="verTipoServicio" ReturnType="Collection(EFoodModel.verTipoServicio_Result)" />
+          <FunctionImport Name="filtroServicioAB" EntitySet="Servicios" ReturnType="Collection(EFoodModel.Servicio)">
+            <Parameter Name="idTipoAB" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="filtroServicioTS" EntitySet="Servicios" ReturnType="Collection(EFoodModel.Servicio)">
+            <Parameter Name="idTipoServicio" Mode="In" Type="Int32" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="buscarDetalleOrden_Result">
           <Property Type="Int32" Name="idOrden" Nullable="false" />
           <Property Type="Int32" Name="idServicio" Nullable="false" />
-          <Property Type="String" Name="Nombre" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="nombreServicio" Nullable="true" MaxLength="50" />
           <Property Type="Double" Name="precio" Nullable="true" />
           <Property Type="Int32" Name="cantidad" Nullable="false" />
           <Property Type="Double" Name="Total" Nullable="true" />
         </ComplexType>
         <ComplexType Name="buscarMesa_Result">
           <Property Type="Int32" Name="idMesa" Nullable="false" />
-          <Property Type="String" Name="Nombre" Nullable="true" MaxLength="25" />
+          <Property Type="String" Name="nombreMesa" Nullable="true" MaxLength="25" />
           <Property Type="Boolean" Name="inactive" Nullable="true" />
         </ComplexType>
         <ComplexType Name="buscarOrden_Result">
           <Property Type="Int32" Name="idOrden" Nullable="false" />
           <Property Type="Int32" Name="idMesa" Nullable="false" />
-          <Property Type="String" Name="Nombre" Nullable="true" MaxLength="25" />
+          <Property Type="String" Name="nombreMesa" Nullable="true" MaxLength="25" />
           <Property Type="String" Name="Descripcion" Nullable="true" MaxLength="Max" />
           <Property Type="DateTime" Name="fecha" Nullable="true" Precision="23" />
         </ComplexType>
         <ComplexType Name="buscarServicio_Result">
           <Property Type="Int32" Name="idServicio" Nullable="false" />
-          <Property Type="Int32" Name="idTipo" Nullable="false" />
-          <Property Type="String" Name="Nombre" Nullable="false" MaxLength="25" />
           <Property Type="Int32" Name="idTipoAB" Nullable="false" />
-          <Property Type="String" Name="Nombre1" Nullable="false" MaxLength="25" />
-          <Property Type="String" Name="Nombre2" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="nombreAB" Nullable="false" MaxLength="25" />
+          <Property Type="Int32" Name="idTipoAB1" Nullable="false" />
+          <Property Type="String" Name="nombreAB1" Nullable="false" MaxLength="25" />
+          <Property Type="String" Name="nombreServicio" Nullable="true" MaxLength="50" />
           <Property Type="Double" Name="precio" Nullable="true" />
           <Property Type="Int32" Name="tiempo" Nullable="true" />
           <Property Type="String" Name="imagen" Nullable="true" MaxLength="Max" />
         </ComplexType>
         <ComplexType Name="buscarTipoAB_Result">
-          <Property Type="Int32" Name="idTipo" Nullable="false" />
-          <Property Type="String" Name="Nombre" Nullable="false" MaxLength="25" />
+          <Property Type="Int32" Name="idTipoAB" Nullable="false" />
+          <Property Type="String" Name="nombreAB" Nullable="false" MaxLength="25" />
           <Property Type="Boolean" Name="inactive" Nullable="true" />
         </ComplexType>
         <ComplexType Name="buscarTipoServicio_Result">
-          <Property Type="Int32" Name="idTipo" Nullable="false" />
-          <Property Type="String" Name="Nombre" Nullable="false" MaxLength="25" />
+          <Property Type="Int32" Name="idTipoAB" Nullable="false" />
+          <Property Type="String" Name="nombreAB" Nullable="false" MaxLength="25" />
           <Property Type="Int32" Name="idTipoServicio" Nullable="false" />
-          <Property Type="String" Name="Nombre1" Nullable="false" MaxLength="25" />
+          <Property Type="String" Name="nombreTS" Nullable="false" MaxLength="25" />
+        </ComplexType>
+        <ComplexType Name="verDetalleOrden_Result">
+          <Property Type="Int32" Name="idOrden" Nullable="false" />
+          <Property Type="Int32" Name="idServicio" Nullable="false" />
+          <Property Type="String" Name="nombreServicio" Nullable="true" MaxLength="50" />
+          <Property Type="Double" Name="precio" Nullable="true" />
+          <Property Type="Int32" Name="cantidad" Nullable="false" />
+          <Property Type="Double" Name="Total" Nullable="true" />
         </ComplexType>
         <ComplexType Name="verMesa_Result">
           <Property Type="Int32" Name="idMesa" Nullable="false" />
-          <Property Type="String" Name="Nombre" Nullable="true" MaxLength="25" />
+          <Property Type="String" Name="nombreMesa" Nullable="true" MaxLength="25" />
           <Property Type="Boolean" Name="inactive" Nullable="true" />
         </ComplexType>
         <ComplexType Name="verOrden_Result">
           <Property Type="Int32" Name="idOrden" Nullable="false" />
           <Property Type="Int32" Name="idMesa" Nullable="false" />
-          <Property Type="String" Name="Nombre" Nullable="true" MaxLength="25" />
+          <Property Type="String" Name="nombreMesa" Nullable="true" MaxLength="25" />
           <Property Type="String" Name="Descripcion" Nullable="true" MaxLength="Max" />
           <Property Type="DateTime" Name="fecha" Nullable="true" Precision="23" />
         </ComplexType>
         <ComplexType Name="verServicio_Result">
           <Property Type="Int32" Name="idServicio" Nullable="false" />
-          <Property Type="Int32" Name="idTipo" Nullable="false" />
-          <Property Type="String" Name="Nombre" Nullable="false" MaxLength="25" />
           <Property Type="Int32" Name="idTipoAB" Nullable="false" />
-          <Property Type="String" Name="Nombre1" Nullable="false" MaxLength="25" />
-          <Property Type="String" Name="Nombre2" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="nombreAB" Nullable="false" MaxLength="25" />
+          <Property Type="Int32" Name="idTipoAB1" Nullable="false" />
+          <Property Type="String" Name="nombreAB1" Nullable="false" MaxLength="25" />
+          <Property Type="String" Name="nombreServicio" Nullable="true" MaxLength="50" />
           <Property Type="Double" Name="precio" Nullable="true" />
           <Property Type="Int32" Name="tiempo" Nullable="true" />
           <Property Type="String" Name="imagen" Nullable="true" MaxLength="Max" />
         </ComplexType>
         <ComplexType Name="verTipoAB_Result">
-          <Property Type="Int32" Name="idTipo" Nullable="false" />
-          <Property Type="String" Name="Nombre" Nullable="false" MaxLength="25" />
+          <Property Type="Int32" Name="idTipoAB" Nullable="false" />
+          <Property Type="String" Name="nombreAB" Nullable="false" MaxLength="25" />
           <Property Type="Boolean" Name="inactive" Nullable="true" />
         </ComplexType>
         <ComplexType Name="verTipoServicio_Result">
-          <Property Type="Int32" Name="idTipo" Nullable="false" />
-          <Property Type="String" Name="Nombre" Nullable="false" MaxLength="25" />
+          <Property Type="Int32" Name="idTipoAB" Nullable="false" />
+          <Property Type="String" Name="nombreAB" Nullable="false" MaxLength="25" />
           <Property Type="Int32" Name="idTipoServicio" Nullable="false" />
-          <Property Type="String" Name="Nombre1" Nullable="false" MaxLength="25" />
+          <Property Type="String" Name="nombreTS" Nullable="false" MaxLength="25" />
+        </ComplexType>
+        <ComplexType Name="filtroServicio_Result">
+          <Property Type="Int32" Name="idServicio" Nullable="false" />
+          <Property Type="Int32" Name="idTipoAB" Nullable="false" />
+          <Property Type="String" Name="nombreAB" Nullable="false" MaxLength="25" />
+          <Property Type="Int32" Name="idTipoServicio" Nullable="false" />
+          <Property Type="String" Name="nombreTS" Nullable="false" MaxLength="25" />
+          <Property Type="String" Name="nombreServicio" Nullable="true" MaxLength="50" />
+          <Property Type="Double" Name="precio" Nullable="true" />
+          <Property Type="Int32" Name="tiempo" Nullable="true" />
+          <Property Type="String" Name="imagen" Nullable="true" MaxLength="Max" />
+        </ComplexType>
+        <ComplexType Name="filtroServicioAB_Result">
+          <Property Type="Int32" Name="idServicio" Nullable="false" />
+          <Property Type="Int32" Name="idTipoAB" Nullable="false" />
+          <Property Type="String" Name="nombreAB" Nullable="false" MaxLength="25" />
+          <Property Type="Int32" Name="idTipoServicio" Nullable="false" />
+          <Property Type="String" Name="nombreTS" Nullable="false" MaxLength="25" />
+          <Property Type="String" Name="nombreServicio" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="descripcion" Nullable="true" MaxLength="Max" />
+          <Property Type="Double" Name="precio" Nullable="true" />
+          <Property Type="Int32" Name="tiempo" Nullable="true" />
+          <Property Type="String" Name="imagen" Nullable="true" MaxLength="Max" />
+          <Property Type="Boolean" Name="inactive" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="filtroServicioTS_Result">
+          <Property Type="Int32" Name="idServicio" Nullable="false" />
+          <Property Type="Int32" Name="idTipoAB" Nullable="false" />
+          <Property Type="String" Name="nombreAB" Nullable="false" MaxLength="25" />
+          <Property Type="Int32" Name="idTipoServicio" Nullable="false" />
+          <Property Type="String" Name="nombreTS" Nullable="false" MaxLength="25" />
+          <Property Type="String" Name="nombreServicio" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="descripcion" Nullable="true" MaxLength="Max" />
+          <Property Type="Double" Name="precio" Nullable="true" />
+          <Property Type="Int32" Name="tiempo" Nullable="true" />
+          <Property Type="String" Name="imagen" Nullable="true" MaxLength="Max" />
+          <Property Type="Boolean" Name="inactive" Nullable="true" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -612,49 +704,14 @@
                 <ScalarProperty Name="cantidad" ColumnName="cantidad" />
               </MappingFragment>
             </EntityTypeMapping>
-            <EntityTypeMapping TypeName="EFoodModel.Detalle_Orden">
-              <ModificationFunctionMapping>
-                <InsertFunction FunctionName="EFoodModel.Store.crearDetalleOrden">
-                  <ScalarProperty Name="cantidad" ParameterName="cantidad" />
-                  <ScalarProperty Name="idServicio" ParameterName="idServicio" />
-                  <ScalarProperty Name="idOrden" ParameterName="idOrden" />
-                  <ResultBinding Name="idOrden" ColumnName="idOrden" />
-                  <ResultBinding Name="idServicio" ColumnName="idServicio" />
-                </InsertFunction>
-                <UpdateFunction FunctionName="EFoodModel.Store.editarDetalleOrden">
-                  <ScalarProperty Name="cantidad" ParameterName="cantidad" Version="Current" />
-                  <ScalarProperty Name="idServicio" ParameterName="idServicio" Version="Current" />
-                  <ScalarProperty Name="idOrden" ParameterName="idOrden" Version="Current" />
-                </UpdateFunction>
-                <DeleteFunction FunctionName="EFoodModel.Store.borrarDetalleOrden">
-                  <ScalarProperty Name="idServicio" ParameterName="idServicio" />
-                  <ScalarProperty Name="idOrden" ParameterName="idOrden" />
-                </DeleteFunction>
-              </ModificationFunctionMapping>
-            </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Mesas">
             <EntityTypeMapping TypeName="EFoodModel.Mesa">
               <MappingFragment StoreEntitySet="Mesa">
                 <ScalarProperty Name="idMesa" ColumnName="idMesa" />
-                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="nombreMesa" ColumnName="nombreMesa" />
                 <ScalarProperty Name="inactive" ColumnName="inactive" />
               </MappingFragment>
-            </EntityTypeMapping>
-            <EntityTypeMapping TypeName="EFoodModel.Mesa">
-              <ModificationFunctionMapping>
-                <InsertFunction FunctionName="EFoodModel.Store.crearMesa" >
-                  <ScalarProperty Name="Nombre" ParameterName="nombre" />
-                  <ResultBinding Name="idMesa" ColumnName="idMesa" />
-                </InsertFunction>
-                <UpdateFunction FunctionName="EFoodModel.Store.editarMesa">
-                  <ScalarProperty Name="Nombre" ParameterName="nombre" Version="Current" />
-                  <ScalarProperty Name="idMesa" ParameterName="idMesa" Version="Current" />
-                </UpdateFunction>
-                <DeleteFunction FunctionName="EFoodModel.Store.buscarMesa">
-                  <ScalarProperty Name="idMesa" ParameterName="idMesa" />
-                </DeleteFunction>
-              </ModificationFunctionMapping>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Ordens">
@@ -667,25 +724,6 @@
                 <ScalarProperty Name="inactive" ColumnName="inactive" />
               </MappingFragment>
             </EntityTypeMapping>
-            <EntityTypeMapping TypeName="EFoodModel.Orden">
-              <ModificationFunctionMapping>
-                <InsertFunction FunctionName="EFoodModel.Store.crearOrden">
-                  <ScalarProperty Name="Fecha" ParameterName="fecha" />
-                  <ScalarProperty Name="Descripcion" ParameterName="descripcion" />
-                  <ScalarProperty Name="idMesa" ParameterName="idMesa" />
-                  <ResultBinding Name="idOrden" ColumnName="idOrden" />
-                </InsertFunction>
-                <UpdateFunction FunctionName="EFoodModel.Store.editarOrden">
-                  <ScalarProperty Name="Fecha" ParameterName="fecha" Version="Current" />
-                  <ScalarProperty Name="Descripcion" ParameterName="descripcion" Version="Current" />
-                  <ScalarProperty Name="idMesa" ParameterName="idMesa" Version="Current" />
-                  <ScalarProperty Name="idOrden" ParameterName="idOrden" Version="Current" />
-                </UpdateFunction>
-                <DeleteFunction FunctionName="EFoodModel.Store.borrarOrden">
-                  <ScalarProperty Name="idOrden" ParameterName="idOrden" />
-                </DeleteFunction>
-              </ModificationFunctionMapping>
-            </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Servicios">
             <EntityTypeMapping TypeName="EFoodModel.Servicio">
@@ -693,7 +731,7 @@
                 <ScalarProperty Name="idServicio" ColumnName="idServicio" />
                 <ScalarProperty Name="idTipoAB" ColumnName="idTipoAB" />
                 <ScalarProperty Name="idTipoServicio" ColumnName="idTipoServicio" />
-                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="nombreServicio" ColumnName="nombreServicio" />
                 <ScalarProperty Name="descripcion" ColumnName="descripcion" />
                 <ScalarProperty Name="precio" ColumnName="precio" />
                 <ScalarProperty Name="tiempo" ColumnName="tiempo" />
@@ -701,56 +739,14 @@
                 <ScalarProperty Name="inactive" ColumnName="inactive" />
               </MappingFragment>
             </EntityTypeMapping>
-            <EntityTypeMapping TypeName="EFoodModel.Servicio">
-              <ModificationFunctionMapping>
-                <InsertFunction FunctionName="EFoodModel.Store.crearServicio">
-                  <ScalarProperty Name="Nombre" ParameterName="nombre" />
-                  <ScalarProperty Name="imagen" ParameterName="imagen" />
-                  <ScalarProperty Name="tiempo" ParameterName="tiempo" />
-                  <ScalarProperty Name="precio" ParameterName="precio" />
-                  <ScalarProperty Name="descripcion" ParameterName="descripcion" />
-                  <ScalarProperty Name="idTipoServicio" ParameterName="idTipoServicio" />
-                  <ScalarProperty Name="idTipoAB" ParameterName="idTipoAB" />
-                  <ResultBinding Name="idServicio" ColumnName="idServicio" />
-                </InsertFunction>
-                <UpdateFunction FunctionName="EFoodModel.Store.editarServicio">
-                  <ScalarProperty Name="Nombre" ParameterName="nombre" Version="Current" />
-                  <ScalarProperty Name="imagen" ParameterName="imagen" Version="Current" />
-                  <ScalarProperty Name="tiempo" ParameterName="tiempo" Version="Current" />
-                  <ScalarProperty Name="precio" ParameterName="precio" Version="Current" />
-                  <ScalarProperty Name="descripcion" ParameterName="descripcion" Version="Current" />
-                  <ScalarProperty Name="idTipoServicio" ParameterName="idTipoServicio" Version="Current" />
-                  <ScalarProperty Name="idTipoAB" ParameterName="idTipoAB" Version="Current" />
-                  <ScalarProperty Name="idServicio" ParameterName="idServicio" Version="Current" />
-                </UpdateFunction>
-                <DeleteFunction FunctionName="EFoodModel.Store.borrarServicio">
-                  <ScalarProperty Name="idServicio" ParameterName="idServicio" />
-                </DeleteFunction>
-              </ModificationFunctionMapping>
-            </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="TipoABs">
             <EntityTypeMapping TypeName="EFoodModel.TipoAB">
               <MappingFragment StoreEntitySet="TipoAB">
-                <ScalarProperty Name="idTipo" ColumnName="idTipo" />
-                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="idTipoAB" ColumnName="idTipoAB" />
+                <ScalarProperty Name="nombreAB" ColumnName="nombreAB" />
                 <ScalarProperty Name="inactive" ColumnName="inactive" />
               </MappingFragment>
-            </EntityTypeMapping>
-            <EntityTypeMapping TypeName="EFoodModel.TipoAB">
-              <ModificationFunctionMapping>
-                <InsertFunction FunctionName="EFoodModel.Store.crearTipoAB" >
-                  <ScalarProperty Name="Nombre" ParameterName="nombre" />
-                  <ResultBinding Name="idTipo" ColumnName="idTipoAB" />
-                </InsertFunction>
-                <UpdateFunction FunctionName="EFoodModel.Store.editarTipoAB" >
-                  <ScalarProperty Name="Nombre" ParameterName="nombre" Version="Current" />
-                  <ScalarProperty Name="idTipo" ParameterName="idTipoAB" Version="Current" />
-                </UpdateFunction>
-                <DeleteFunction FunctionName="EFoodModel.Store.borrarTipoAB" >
-                  <ScalarProperty Name="idTipo" ParameterName="idTipoAB" />
-                </DeleteFunction>
-              </ModificationFunctionMapping>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="TipoServicios">
@@ -758,26 +754,9 @@
               <MappingFragment StoreEntitySet="TipoServicio">
                 <ScalarProperty Name="idTipoServicio" ColumnName="idTipoServicio" />
                 <ScalarProperty Name="idTipoAB" ColumnName="idTipoAB" />
-                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="nombreTS" ColumnName="nombreTS" />
                 <ScalarProperty Name="inactive" ColumnName="inactive" />
               </MappingFragment>
-            </EntityTypeMapping>
-            <EntityTypeMapping TypeName="EFoodModel.TipoServicio">
-              <ModificationFunctionMapping>
-                <InsertFunction FunctionName="EFoodModel.Store.crearTipoServicio">
-                  <ScalarProperty Name="Nombre" ParameterName="nombre" />
-                  <ScalarProperty Name="idTipoAB" ParameterName="idTipoAB" />
-                  <ResultBinding Name="idTipoServicio" ColumnName="idTipoServicio" />
-                </InsertFunction>
-                <UpdateFunction FunctionName="EFoodModel.Store.editarTipoServicio">
-                  <ScalarProperty Name="Nombre" ParameterName="nombre" Version="Current" />
-                  <ScalarProperty Name="idTipoAB" ParameterName="idTipoAB" Version="Current" />
-                  <ScalarProperty Name="idTipoServicio" ParameterName="idTipoServicio" Version="Current" />
-                </UpdateFunction>
-                <DeleteFunction FunctionName="EFoodModel.Store.borrarTipoServicio">
-                  <ScalarProperty Name="idTipoServicio" ParameterName="idTipoServicio" />
-                </DeleteFunction>
-              </ModificationFunctionMapping>
             </EntityTypeMapping>
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="borrarDetalleOrden" FunctionName="EFoodModel.Store.borrarDetalleOrden" />
@@ -787,70 +766,16 @@
           <FunctionImportMapping FunctionImportName="borrarTipoAB" FunctionName="EFoodModel.Store.borrarTipoAB" />
           <FunctionImportMapping FunctionImportName="borrarTipoServicio" FunctionName="EFoodModel.Store.borrarTipoServicio" />
           <FunctionImportMapping FunctionImportName="buscarDetalleOrden" FunctionName="EFoodModel.Store.buscarDetalleOrden">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="EFoodModel.buscarDetalleOrden_Result">
-                <ScalarProperty Name="idOrden" ColumnName="idOrden" />
-                <ScalarProperty Name="idServicio" ColumnName="idServicio" />
-                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
-                <ScalarProperty Name="precio" ColumnName="precio" />
-                <ScalarProperty Name="cantidad" ColumnName="cantidad" />
-                <ScalarProperty Name="Total" ColumnName="Total" />
-              </ComplexTypeMapping>
-            </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="buscarMesa" FunctionName="EFoodModel.Store.buscarMesa">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="EFoodModel.buscarMesa_Result">
-                <ScalarProperty Name="idMesa" ColumnName="idMesa" />
-                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
-                <ScalarProperty Name="inactive" ColumnName="inactive" />
-              </ComplexTypeMapping>
-            </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="buscarOrden" FunctionName="EFoodModel.Store.buscarOrden">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="EFoodModel.buscarOrden_Result">
-                <ScalarProperty Name="idOrden" ColumnName="idOrden" />
-                <ScalarProperty Name="idMesa" ColumnName="idMesa" />
-                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
-                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
-                <ScalarProperty Name="fecha" ColumnName="fecha" />
-              </ComplexTypeMapping>
-            </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="buscarServicio" FunctionName="EFoodModel.Store.buscarServicio">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="EFoodModel.buscarServicio_Result">
-                <ScalarProperty Name="idServicio" ColumnName="idServicio" />
-                <ScalarProperty Name="idTipo" ColumnName="idTipo" />
-                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
-                <ScalarProperty Name="idTipoAB" ColumnName="idTipoAB" />
-                <ScalarProperty Name="Nombre1" ColumnName="Nombre1" />
-                <ScalarProperty Name="Nombre2" ColumnName="Nombre2" />
-                <ScalarProperty Name="precio" ColumnName="precio" />
-                <ScalarProperty Name="tiempo" ColumnName="tiempo" />
-                <ScalarProperty Name="imagen" ColumnName="imagen" />
-              </ComplexTypeMapping>
-            </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="buscarTipoAB" FunctionName="EFoodModel.Store.buscarTipoAB">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="EFoodModel.buscarTipoAB_Result">
-                <ScalarProperty Name="idTipo" ColumnName="idTipo" />
-                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
-                <ScalarProperty Name="inactive" ColumnName="inactive" />
-              </ComplexTypeMapping>
-            </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="buscarTipoServicio" FunctionName="EFoodModel.Store.buscarTipoServicio">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="EFoodModel.buscarTipoServicio_Result">
-                <ScalarProperty Name="idTipo" ColumnName="idTipo" />
-                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
-                <ScalarProperty Name="idTipoServicio" ColumnName="idTipoServicio" />
-                <ScalarProperty Name="Nombre1" ColumnName="Nombre1" />
-              </ComplexTypeMapping>
-            </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="crearDetalleOrden" FunctionName="EFoodModel.Store.crearDetalleOrden" />
           <FunctionImportMapping FunctionImportName="crearMesa" FunctionName="EFoodModel.Store.crearMesa" />
@@ -864,11 +789,23 @@
           <FunctionImportMapping FunctionImportName="editarServicio" FunctionName="EFoodModel.Store.editarServicio" />
           <FunctionImportMapping FunctionImportName="editarTipoAB" FunctionName="EFoodModel.Store.editarTipoAB" />
           <FunctionImportMapping FunctionImportName="editarTipoServicio" FunctionName="EFoodModel.Store.editarTipoServicio" />
+          <FunctionImportMapping FunctionImportName="verDetalleOrden" FunctionName="EFoodModel.Store.verDetalleOrden">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="EFoodModel.verDetalleOrden_Result">
+                <ScalarProperty Name="idOrden" ColumnName="idOrden" />
+                <ScalarProperty Name="idServicio" ColumnName="idServicio" />
+                <ScalarProperty Name="nombreServicio" ColumnName="nombreServicio" />
+                <ScalarProperty Name="precio" ColumnName="precio" />
+                <ScalarProperty Name="cantidad" ColumnName="cantidad" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="verMesa" FunctionName="EFoodModel.Store.verMesa">
             <ResultMapping>
               <ComplexTypeMapping TypeName="EFoodModel.verMesa_Result">
                 <ScalarProperty Name="idMesa" ColumnName="idMesa" />
-                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="nombreMesa" ColumnName="nombreMesa" />
                 <ScalarProperty Name="inactive" ColumnName="inactive" />
               </ComplexTypeMapping>
             </ResultMapping>
@@ -878,7 +815,7 @@
               <ComplexTypeMapping TypeName="EFoodModel.verOrden_Result">
                 <ScalarProperty Name="idOrden" ColumnName="idOrden" />
                 <ScalarProperty Name="idMesa" ColumnName="idMesa" />
-                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="nombreMesa" ColumnName="nombreMesa" />
                 <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
                 <ScalarProperty Name="fecha" ColumnName="fecha" />
               </ComplexTypeMapping>
@@ -888,11 +825,11 @@
             <ResultMapping>
               <ComplexTypeMapping TypeName="EFoodModel.verServicio_Result">
                 <ScalarProperty Name="idServicio" ColumnName="idServicio" />
-                <ScalarProperty Name="idTipo" ColumnName="idTipo" />
-                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
                 <ScalarProperty Name="idTipoAB" ColumnName="idTipoAB" />
-                <ScalarProperty Name="Nombre1" ColumnName="Nombre1" />
-                <ScalarProperty Name="Nombre2" ColumnName="Nombre2" />
+                <ScalarProperty Name="nombreAB" ColumnName="nombreAB" />
+                <ScalarProperty Name="idTipoAB1" ColumnName="idTipoAB1" />
+                <ScalarProperty Name="nombreAB1" ColumnName="nombreAB1" />
+                <ScalarProperty Name="nombreServicio" ColumnName="nombreServicio" />
                 <ScalarProperty Name="precio" ColumnName="precio" />
                 <ScalarProperty Name="tiempo" ColumnName="tiempo" />
                 <ScalarProperty Name="imagen" ColumnName="imagen" />
@@ -902,8 +839,8 @@
           <FunctionImportMapping FunctionImportName="verTipoAB" FunctionName="EFoodModel.Store.verTipoAB">
             <ResultMapping>
               <ComplexTypeMapping TypeName="EFoodModel.verTipoAB_Result">
-                <ScalarProperty Name="idTipo" ColumnName="idTipo" />
-                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="idTipoAB" ColumnName="idTipoAB" />
+                <ScalarProperty Name="nombreAB" ColumnName="nombreAB" />
                 <ScalarProperty Name="inactive" ColumnName="inactive" />
               </ComplexTypeMapping>
             </ResultMapping>
@@ -911,12 +848,16 @@
           <FunctionImportMapping FunctionImportName="verTipoServicio" FunctionName="EFoodModel.Store.verTipoServicio">
             <ResultMapping>
               <ComplexTypeMapping TypeName="EFoodModel.verTipoServicio_Result">
-                <ScalarProperty Name="idTipo" ColumnName="idTipo" />
-                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="idTipoAB" ColumnName="idTipoAB" />
+                <ScalarProperty Name="nombreAB" ColumnName="nombreAB" />
                 <ScalarProperty Name="idTipoServicio" ColumnName="idTipoServicio" />
-                <ScalarProperty Name="Nombre1" ColumnName="Nombre1" />
+                <ScalarProperty Name="nombreTS" ColumnName="nombreTS" />
               </ComplexTypeMapping>
             </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="filtroServicioAB" FunctionName="EFoodModel.Store.filtroServicioAB">
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="filtroServicioTS" FunctionName="EFoodModel.Store.filtroServicioTS">
           </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>

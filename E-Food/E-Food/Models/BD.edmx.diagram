@@ -4,13 +4,14 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="775f202990ac49f1858b4d0fcee6601a" Name="Diagram1">
-        <EntityTypeShape EntityType="EFoodModel.Detalle_Orden" Width="1.5" PointX="7.5" PointY="5.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="EFoodModel.Mesa" Width="1.5" PointX="2.75" PointY="1.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="EFoodModel.Orden" Width="1.5" PointX="5" PointY="0.875" IsExpanded="true" />
+      <Diagram DiagramId="c022ab69151b46389ff7ee7ee41b8311" Name="Diagram1">
+        <EntityTypeShape EntityType="EFoodModel.Detalle_Orden" Width="1.5" PointX="7.5" PointY="5.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="EFoodModel.Mesa" Width="1.5" PointX="3" PointY="1.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="EFoodModel.Orden" Width="1.5" PointX="5.25" PointY="1.125" IsExpanded="true" />
         <EntityTypeShape EntityType="EFoodModel.Servicio" Width="1.5" PointX="5.25" PointY="4.625" IsExpanded="true" />
         <EntityTypeShape EntityType="EFoodModel.TipoAB" Width="1.5" PointX="0.75" PointY="3.25" IsExpanded="true" />
         <EntityTypeShape EntityType="EFoodModel.TipoServicio" Width="1.5" PointX="3" PointY="7.25" IsExpanded="true" />
+        <AssociationConnector Association="EFoodModel.fk_DetalleOrden_idOrden" ManuallyRouted="false" />
         <AssociationConnector Association="EFoodModel.fk_DetalleOrden_idServicio" ManuallyRouted="false" />
         <AssociationConnector Association="EFoodModel.fk_Orden_Mesa" ManuallyRouted="false" />
         <AssociationConnector Association="EFoodModel.fk_Servicio_TipoAB" ManuallyRouted="false" />

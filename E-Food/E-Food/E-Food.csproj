@@ -124,15 +124,15 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Site.css" />
     <Content Include="Global.asax" />
-    <Content Include="Models\DB.Context.tt">
+    <Content Include="Models\BD.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>BD.edmx</DependentUpon>
-      <LastGenOutput>DB.Context.cs</LastGenOutput>
+      <LastGenOutput>BD.Context.cs</LastGenOutput>
     </Content>
-    <Content Include="Models\DB.tt">
+    <Content Include="Models\BD.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>BD.edmx</DependentUpon>
-      <LastGenOutput>DB.cs</LastGenOutput>
+      <LastGenOutput>BD.cs</LastGenOutput>
     </Content>
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
@@ -182,92 +182,108 @@
     <Content Include="Scripts\umd\popper-utils.min.js" />
     <Content Include="Scripts\umd\popper.js" />
     <Content Include="Scripts\umd\popper.min.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="Controllers\Controlador.cs" />
-    <Compile Include="Controllers\TablaController.cs" />
+    <Compile Include="Controllers\OrdenController.cs" />
+    <Compile Include="Controllers\ServicioController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\buscarDetalleOrden_Result.cs">
-      <DependentUpon>DB.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\buscarMesa_Result.cs">
-      <DependentUpon>DB.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\buscarOrden_Result.cs">
-      <DependentUpon>DB.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\buscarServicio_Result.cs">
-      <DependentUpon>DB.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\buscarTipoAB_Result.cs">
-      <DependentUpon>DB.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\buscarTipoServicio_Result.cs">
-      <DependentUpon>DB.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Conexion.cs" />
-    <Compile Include="Models\DB.Context.cs">
+    <Compile Include="Models\BD.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>DB.Context.tt</DependentUpon>
+      <DependentUpon>BD.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\DB.cs">
+    <Compile Include="Models\BD.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>DB.tt</DependentUpon>
+      <DependentUpon>BD.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\BD.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>BD.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\buscarDetalleOrden_Result.cs">
+      <DependentUpon>BD.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\buscarMesa_Result.cs">
+      <DependentUpon>BD.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\buscarOrden_Result.cs">
+      <DependentUpon>BD.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\buscarServicio_Result.cs">
+      <DependentUpon>BD.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\buscarTipoAB_Result.cs">
+      <DependentUpon>BD.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\buscarTipoServicio_Result.cs">
+      <DependentUpon>BD.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Conexion.cs" />
     <Compile Include="Models\Detalle_Orden.cs">
-      <DependentUpon>DB.tt</DependentUpon>
+      <DependentUpon>BD.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\filtroServicioAB_Result.cs">
+      <DependentUpon>BD.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\filtroServicioTS_Result.cs">
+      <DependentUpon>BD.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\filtroServicio_Result.cs">
+      <DependentUpon>BD.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\LoginData.cs" />
     <Compile Include="Models\MantenimientoTipoAB.cs" />
     <Compile Include="Models\Mesa.cs">
-      <DependentUpon>DB.tt</DependentUpon>
+      <DependentUpon>BD.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Orden.cs">
-      <DependentUpon>DB.tt</DependentUpon>
+      <DependentUpon>BD.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Servicio.cs">
-      <DependentUpon>DB.tt</DependentUpon>
+      <DependentUpon>BD.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\TipoAB.cs">
-      <DependentUpon>DB.tt</DependentUpon>
+      <DependentUpon>BD.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\TipoServicio.cs">
-      <DependentUpon>DB.tt</DependentUpon>
+      <DependentUpon>BD.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\verDetalleOrden_Result.cs">
+      <DependentUpon>BD.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\verMesa_Result.cs">
-      <DependentUpon>DB.tt</DependentUpon>
+      <DependentUpon>BD.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\verOrden_Result.cs">
-      <DependentUpon>DB.tt</DependentUpon>
+      <DependentUpon>BD.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\verServicio_Result.cs">
-      <DependentUpon>DB.tt</DependentUpon>
+      <DependentUpon>BD.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\verTipoAB_Result.cs">
-      <DependentUpon>DB.tt</DependentUpon>
+      <DependentUpon>BD.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\verTipoServicio_Result.cs">
-      <DependentUpon>DB.tt</DependentUpon>
+      <DependentUpon>BD.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\ViewModels\ListaTabla.cs" />
-    <Compile Include="Models\ViewModels\TablaTipoAB.cs" />
+    <Compile Include="Models\ViewModels\ViewDetalleOrden.cs" />
+    <Compile Include="Models\ViewModels\ViewOrden.cs" />
+    <Compile Include="Models\ViewModels\ViewServicio.cs" />
+    <Compile Include="Models\ViewModels\ViewTipoAB.cs" />
+    <Compile Include="Models\ViewModels\ViewTipoServicio.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\web.config" />
     <None Include="packages.config" />
-    <Content Include="Views\Tabla\Index.cshtml" />
     <Content Include="Scripts\jquery-3.0.0.slim.min.map" />
     <Content Include="Scripts\jquery-3.0.0.min.map" />
     <Content Include="Scripts\umd\popper.min.js.map" />
@@ -281,9 +297,21 @@
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Tabla\Nuevo.cshtml" />
     <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.3.1.min.map" />
+    <Content Include="Views\Orden\AgregarDetalle.cshtml" />
+    <Content Include="Views\Servicio\Entradas.cshtml" />
+    <Content Include="Views\Servicio\CrearServicio.cshtml" />
+    <Content Include="Views\Orden\editarDetalle.cshtml" />
+    <Content Include="Views\Servicio\Bebidas.cshtml" />
+    <Content Include="Views\Servicio\PlatosFuerte.cshtml" />
+    <Content Include="Views\Servicio\Carnes.cshtml" />
+    <Content Include="Views\Servicio\Postres.cshtml" />
+    <Content Include="Views\Servicio\Ensaladas.cshtml" />
+    <Content Include="Views\Servicio\Pastas.cshtml" />
+    <Content Include="Views\Servicio\Aves.cshtml" />
+    <Content Include="Views\Servicio\Mariscos.cshtml" />
+    <Content Include="Views\Servicio\View.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -293,6 +321,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="images\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />

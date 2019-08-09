@@ -13,9 +13,9 @@ namespace E_Food.Models
     
     public partial class buscarTipoServicio_Result
     {
-        public int idTipo { get; set; }
-        public string Nombre { get; set; }
+        public int idTipoAB { get; set; }
+        public string nombreAB { get; set; }
         public int idTipoServicio { get; set; }
-        public string Nombre1 { get; set; }
+        public string nombreTS { get; set; }
     }
 }

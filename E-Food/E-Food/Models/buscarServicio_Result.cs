@@ -14,11 +14,11 @@ namespace E_Food.Models
     public partial class buscarServicio_Result
     {
         public int idServicio { get; set; }
-        public int idTipo { get; set; }
-        public string Nombre { get; set; }
         public int idTipoAB { get; set; }
-        public string Nombre1 { get; set; }
-        public string Nombre2 { get; set; }
+        public string nombreAB { get; set; }
+        public int idTipoAB1 { get; set; }
+        public string nombreAB1 { get; set; }
+        public string nombreServicio { get; set; }
         public Nullable<double> precio { get; set; }
         public Nullable<int> tiempo { get; set; }
         public string imagen { get; set; }

@@ -14,12 +14,20 @@ namespace E_Food.Models
     
     public partial class Orden
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Orden()
+        {
+            this.Detalle_Orden = new HashSet<Detalle_Orden>();
+        }
+    
         public int idOrden { get; set; }
         public int idMesa { get; set; }
         public string Descripcion { get; set; }
         public Nullable<System.DateTime> Fecha { get; set; }
         public Nullable<bool> inactive { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Detalle_Orden> Detalle_Orden { get; set; }
         public virtual Mesa Mesa { get; set; }
     }
 }

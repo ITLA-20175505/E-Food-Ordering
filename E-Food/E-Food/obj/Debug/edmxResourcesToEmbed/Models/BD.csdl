@@ -8,6 +8,7 @@
     <Property Name="idOrden" Type="Int32" Nullable="false" />
     <Property Name="idServicio" Type="Int32" Nullable="false" />
     <Property Name="cantidad" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Orden" Relationship="Self.fk_DetalleOrden_idOrden" FromRole="Detalle_Orden" ToRole="Orden" />
     <NavigationProperty Name="Servicio" Relationship="Self.fk_DetalleOrden_idServicio" FromRole="Detalle_Orden" ToRole="Servicio" />
   </EntityType>
   <EntityType Name="Mesa">
@@ -15,7 +16,7 @@
       <PropertyRef Name="idMesa" />
     </Key>
     <Property Name="idMesa" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="Nombre" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+    <Property Name="nombreMesa" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
     <Property Name="inactive" Type="Boolean" />
     <NavigationProperty Name="Ordens" Relationship="Self.fk_Orden_Mesa" FromRole="Mesa" ToRole="Orden" />
   </EntityType>
@@ -28,6 +29,7 @@
     <Property Name="Descripcion" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
     <Property Name="Fecha" Type="DateTime" Precision="3" />
     <Property Name="inactive" Type="Boolean" />
+    <NavigationProperty Name="Detalle_Orden" Relationship="Self.fk_DetalleOrden_idOrden" FromRole="Orden" ToRole="Detalle_Orden" />
     <NavigationProperty Name="Mesa" Relationship="Self.fk_Orden_Mesa" FromRole="Orden" ToRole="Mesa" />
   </EntityType>
   <EntityType Name="Servicio">
@@ -37,7 +39,7 @@
     <Property Name="idServicio" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="idTipoAB" Type="Int32" Nullable="false" />
     <Property Name="idTipoServicio" Type="Int32" />
-    <Property Name="Nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="nombreServicio" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="descripcion" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
     <Property Name="precio" Type="Double" />
     <Property Name="tiempo" Type="Int32" />
@@ -49,10 +51,10 @@
   </EntityType>
   <EntityType Name="TipoAB">
     <Key>
-      <PropertyRef Name="idTipo" />
+      <PropertyRef Name="idTipoAB" />
     </Key>
-    <Property Name="idTipo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="Nombre" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="idTipoAB" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="nombreAB" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
     <Property Name="inactive" Type="Boolean" />
     <NavigationProperty Name="Servicios" Relationship="Self.fk_Servicio_TipoAB" FromRole="TipoAB" ToRole="Servicio" />
     <NavigationProperty Name="TipoServicios" Relationship="Self.fk_TipoComida_TipoAB" FromRole="TipoAB" ToRole="TipoServicio" />
@@ -63,11 +65,23 @@
     </Key>
     <Property Name="idTipoServicio" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="idTipoAB" Type="Int32" Nullable="false" />
-    <Property Name="Nombre" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="nombreTS" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
     <Property Name="inactive" Type="Boolean" />
     <NavigationProperty Name="Servicios" Relationship="Self.fk_Servicio_TipoServicio" FromRole="TipoServicio" ToRole="Servicio" />
     <NavigationProperty Name="TipoAB" Relationship="Self.fk_TipoComida_TipoAB" FromRole="TipoServicio" ToRole="TipoAB" />
   </EntityType>
+  <Association Name="fk_DetalleOrden_idOrden">
+    <End Role="Orden" Type="Self.Orden" Multiplicity="1" />
+    <End Role="Detalle_Orden" Type="Self.Detalle_Orden" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Orden">
+        <PropertyRef Name="idOrden" />
+      </Principal>
+      <Dependent Role="Detalle_Orden">
+        <PropertyRef Name="idOrden" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="fk_DetalleOrden_idServicio">
     <End Role="Servicio" Type="Self.Servicio" Multiplicity="1" />
     <End Role="Detalle_Orden" Type="Self.Detalle_Orden" Multiplicity="*" />
@@ -97,7 +111,7 @@
     <End Role="Servicio" Type="Self.Servicio" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="TipoAB">
-        <PropertyRef Name="idTipo" />
+        <PropertyRef Name="idTipoAB" />
       </Principal>
       <Dependent Role="Servicio">
         <PropertyRef Name="idTipoAB" />
@@ -121,7 +135,7 @@
     <End Role="TipoServicio" Type="Self.TipoServicio" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="TipoAB">
-        <PropertyRef Name="idTipo" />
+        <PropertyRef Name="idTipoAB" />
       </Principal>
       <Dependent Role="TipoServicio">
         <PropertyRef Name="idTipoAB" />
@@ -135,6 +149,10 @@
     <EntitySet Name="Servicios" EntityType="Self.Servicio" />
     <EntitySet Name="TipoABs" EntityType="Self.TipoAB" />
     <EntitySet Name="TipoServicios" EntityType="Self.TipoServicio" />
+    <AssociationSet Name="fk_DetalleOrden_idOrden" Association="Self.fk_DetalleOrden_idOrden">
+      <End Role="Orden" EntitySet="Ordens" />
+      <End Role="Detalle_Orden" EntitySet="Detalle_Orden" />
+    </AssociationSet>
     <AssociationSet Name="fk_DetalleOrden_idServicio" Association="Self.fk_DetalleOrden_idServicio">
       <End Role="Servicio" EntitySet="Servicios" />
       <End Role="Detalle_Orden" EntitySet="Detalle_Orden" />
@@ -174,22 +192,22 @@
     <FunctionImport Name="borrarTipoServicio">
       <Parameter Name="idTipoServicio" Mode="In" Type="Int32" />
     </FunctionImport>
-    <FunctionImport Name="buscarDetalleOrden" ReturnType="Collection(EFoodModel.buscarDetalleOrden_Result)">
+    <FunctionImport Name="buscarDetalleOrden" EntitySet="Detalle_Orden" ReturnType="Collection(EFoodModel.Detalle_Orden)">
       <Parameter Name="idOrden" Mode="In" Type="Int32" />
     </FunctionImport>
-    <FunctionImport Name="buscarMesa" ReturnType="Collection(EFoodModel.buscarMesa_Result)">
+    <FunctionImport Name="buscarMesa" EntitySet="Mesas" ReturnType="Collection(EFoodModel.Mesa)">
       <Parameter Name="idMesa" Mode="In" Type="Int32" />
     </FunctionImport>
-    <FunctionImport Name="buscarOrden" ReturnType="Collection(EFoodModel.buscarOrden_Result)">
+    <FunctionImport Name="buscarOrden" EntitySet="Ordens" ReturnType="Collection(EFoodModel.Orden)">
       <Parameter Name="idOrden" Mode="In" Type="Int32" />
     </FunctionImport>
-    <FunctionImport Name="buscarServicio" ReturnType="Collection(EFoodModel.buscarServicio_Result)">
+    <FunctionImport Name="buscarServicio" EntitySet="Servicios" ReturnType="Collection(EFoodModel.Servicio)">
       <Parameter Name="idServicio" Mode="In" Type="Int32" />
     </FunctionImport>
-    <FunctionImport Name="buscarTipoAB" ReturnType="Collection(EFoodModel.buscarTipoAB_Result)">
+    <FunctionImport Name="buscarTipoAB" EntitySet="TipoABs" ReturnType="Collection(EFoodModel.TipoAB)">
       <Parameter Name="idTipoAB" Mode="In" Type="Int32" />
     </FunctionImport>
-    <FunctionImport Name="buscarTipoServicio" ReturnType="Collection(EFoodModel.buscarTipoServicio_Result)">
+    <FunctionImport Name="buscarTipoServicio" EntitySet="TipoServicios" ReturnType="Collection(EFoodModel.TipoServicio)">
       <Parameter Name="idTipoServicio" Mode="In" Type="Int32" />
     </FunctionImport>
     <FunctionImport Name="crearDetalleOrden">
@@ -255,86 +273,138 @@
       <Parameter Name="idTipoAB" Mode="In" Type="Int32" />
       <Parameter Name="nombre" Mode="In" Type="String" />
     </FunctionImport>
+    <FunctionImport Name="verDetalleOrden" ReturnType="Collection(EFoodModel.verDetalleOrden_Result)" />
     <FunctionImport Name="verMesa" ReturnType="Collection(EFoodModel.verMesa_Result)" />
     <FunctionImport Name="verOrden" ReturnType="Collection(EFoodModel.verOrden_Result)" />
     <FunctionImport Name="verServicio" ReturnType="Collection(EFoodModel.verServicio_Result)" />
     <FunctionImport Name="verTipoAB" ReturnType="Collection(EFoodModel.verTipoAB_Result)" />
     <FunctionImport Name="verTipoServicio" ReturnType="Collection(EFoodModel.verTipoServicio_Result)" />
+    <FunctionImport Name="filtroServicioAB" EntitySet="Servicios" ReturnType="Collection(EFoodModel.Servicio)">
+      <Parameter Name="idTipoAB" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="filtroServicioTS" EntitySet="Servicios" ReturnType="Collection(EFoodModel.Servicio)">
+      <Parameter Name="idTipoServicio" Mode="In" Type="Int32" />
+    </FunctionImport>
   </EntityContainer>
   <ComplexType Name="buscarDetalleOrden_Result">
     <Property Type="Int32" Name="idOrden" Nullable="false" />
     <Property Type="Int32" Name="idServicio" Nullable="false" />
-    <Property Type="String" Name="Nombre" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="nombreServicio" Nullable="true" MaxLength="50" />
     <Property Type="Double" Name="precio" Nullable="true" />
     <Property Type="Int32" Name="cantidad" Nullable="false" />
     <Property Type="Double" Name="Total" Nullable="true" />
   </ComplexType>
   <ComplexType Name="buscarMesa_Result">
     <Property Type="Int32" Name="idMesa" Nullable="false" />
-    <Property Type="String" Name="Nombre" Nullable="true" MaxLength="25" />
+    <Property Type="String" Name="nombreMesa" Nullable="true" MaxLength="25" />
     <Property Type="Boolean" Name="inactive" Nullable="true" />
   </ComplexType>
   <ComplexType Name="buscarOrden_Result">
     <Property Type="Int32" Name="idOrden" Nullable="false" />
     <Property Type="Int32" Name="idMesa" Nullable="false" />
-    <Property Type="String" Name="Nombre" Nullable="true" MaxLength="25" />
+    <Property Type="String" Name="nombreMesa" Nullable="true" MaxLength="25" />
     <Property Type="String" Name="Descripcion" Nullable="true" MaxLength="Max" />
     <Property Type="DateTime" Name="fecha" Nullable="true" Precision="23" />
   </ComplexType>
   <ComplexType Name="buscarServicio_Result">
     <Property Type="Int32" Name="idServicio" Nullable="false" />
-    <Property Type="Int32" Name="idTipo" Nullable="false" />
-    <Property Type="String" Name="Nombre" Nullable="false" MaxLength="25" />
     <Property Type="Int32" Name="idTipoAB" Nullable="false" />
-    <Property Type="String" Name="Nombre1" Nullable="false" MaxLength="25" />
-    <Property Type="String" Name="Nombre2" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="nombreAB" Nullable="false" MaxLength="25" />
+    <Property Type="Int32" Name="idTipoAB1" Nullable="false" />
+    <Property Type="String" Name="nombreAB1" Nullable="false" MaxLength="25" />
+    <Property Type="String" Name="nombreServicio" Nullable="true" MaxLength="50" />
     <Property Type="Double" Name="precio" Nullable="true" />
     <Property Type="Int32" Name="tiempo" Nullable="true" />
     <Property Type="String" Name="imagen" Nullable="true" MaxLength="Max" />
   </ComplexType>
   <ComplexType Name="buscarTipoAB_Result">
-    <Property Type="Int32" Name="idTipo" Nullable="false" />
-    <Property Type="String" Name="Nombre" Nullable="false" MaxLength="25" />
+    <Property Type="Int32" Name="idTipoAB" Nullable="false" />
+    <Property Type="String" Name="nombreAB" Nullable="false" MaxLength="25" />
     <Property Type="Boolean" Name="inactive" Nullable="true" />
   </ComplexType>
   <ComplexType Name="buscarTipoServicio_Result">
-    <Property Type="Int32" Name="idTipo" Nullable="false" />
-    <Property Type="String" Name="Nombre" Nullable="false" MaxLength="25" />
+    <Property Type="Int32" Name="idTipoAB" Nullable="false" />
+    <Property Type="String" Name="nombreAB" Nullable="false" MaxLength="25" />
     <Property Type="Int32" Name="idTipoServicio" Nullable="false" />
-    <Property Type="String" Name="Nombre1" Nullable="false" MaxLength="25" />
+    <Property Type="String" Name="nombreTS" Nullable="false" MaxLength="25" />
+  </ComplexType>
+  <ComplexType Name="verDetalleOrden_Result">
+    <Property Type="Int32" Name="idOrden" Nullable="false" />
+    <Property Type="Int32" Name="idServicio" Nullable="false" />
+    <Property Type="String" Name="nombreServicio" Nullable="true" MaxLength="50" />
+    <Property Type="Double" Name="precio" Nullable="true" />
+    <Property Type="Int32" Name="cantidad" Nullable="false" />
+    <Property Type="Double" Name="Total" Nullable="true" />
   </ComplexType>
   <ComplexType Name="verMesa_Result">
     <Property Type="Int32" Name="idMesa" Nullable="false" />
-    <Property Type="String" Name="Nombre" Nullable="true" MaxLength="25" />
+    <Property Type="String" Name="nombreMesa" Nullable="true" MaxLength="25" />
     <Property Type="Boolean" Name="inactive" Nullable="true" />
   </ComplexType>
   <ComplexType Name="verOrden_Result">
     <Property Type="Int32" Name="idOrden" Nullable="false" />
     <Property Type="Int32" Name="idMesa" Nullable="false" />
-    <Property Type="String" Name="Nombre" Nullable="true" MaxLength="25" />
+    <Property Type="String" Name="nombreMesa" Nullable="true" MaxLength="25" />
     <Property Type="String" Name="Descripcion" Nullable="true" MaxLength="Max" />
     <Property Type="DateTime" Name="fecha" Nullable="true" Precision="23" />
   </ComplexType>
   <ComplexType Name="verServicio_Result">
     <Property Type="Int32" Name="idServicio" Nullable="false" />
-    <Property Type="Int32" Name="idTipo" Nullable="false" />
-    <Property Type="String" Name="Nombre" Nullable="false" MaxLength="25" />
     <Property Type="Int32" Name="idTipoAB" Nullable="false" />
-    <Property Type="String" Name="Nombre1" Nullable="false" MaxLength="25" />
-    <Property Type="String" Name="Nombre2" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="nombreAB" Nullable="false" MaxLength="25" />
+    <Property Type="Int32" Name="idTipoAB1" Nullable="false" />
+    <Property Type="String" Name="nombreAB1" Nullable="false" MaxLength="25" />
+    <Property Type="String" Name="nombreServicio" Nullable="true" MaxLength="50" />
     <Property Type="Double" Name="precio" Nullable="true" />
     <Property Type="Int32" Name="tiempo" Nullable="true" />
     <Property Type="String" Name="imagen" Nullable="true" MaxLength="Max" />
   </ComplexType>
   <ComplexType Name="verTipoAB_Result">
-    <Property Type="Int32" Name="idTipo" Nullable="false" />
-    <Property Type="String" Name="Nombre" Nullable="false" MaxLength="25" />
+    <Property Type="Int32" Name="idTipoAB" Nullable="false" />
+    <Property Type="String" Name="nombreAB" Nullable="false" MaxLength="25" />
     <Property Type="Boolean" Name="inactive" Nullable="true" />
   </ComplexType>
   <ComplexType Name="verTipoServicio_Result">
-    <Property Type="Int32" Name="idTipo" Nullable="false" />
-    <Property Type="String" Name="Nombre" Nullable="false" MaxLength="25" />
+    <Property Type="Int32" Name="idTipoAB" Nullable="false" />
+    <Property Type="String" Name="nombreAB" Nullable="false" MaxLength="25" />
     <Property Type="Int32" Name="idTipoServicio" Nullable="false" />
-    <Property Type="String" Name="Nombre1" Nullable="false" MaxLength="25" />
+    <Property Type="String" Name="nombreTS" Nullable="false" MaxLength="25" />
+  </ComplexType>
+  <ComplexType Name="filtroServicio_Result">
+    <Property Type="Int32" Name="idServicio" Nullable="false" />
+    <Property Type="Int32" Name="idTipoAB" Nullable="false" />
+    <Property Type="String" Name="nombreAB" Nullable="false" MaxLength="25" />
+    <Property Type="Int32" Name="idTipoServicio" Nullable="false" />
+    <Property Type="String" Name="nombreTS" Nullable="false" MaxLength="25" />
+    <Property Type="String" Name="nombreServicio" Nullable="true" MaxLength="50" />
+    <Property Type="Double" Name="precio" Nullable="true" />
+    <Property Type="Int32" Name="tiempo" Nullable="true" />
+    <Property Type="String" Name="imagen" Nullable="true" MaxLength="Max" />
+  </ComplexType>
+  <ComplexType Name="filtroServicioAB_Result">
+    <Property Type="Int32" Name="idServicio" Nullable="false" />
+    <Property Type="Int32" Name="idTipoAB" Nullable="false" />
+    <Property Type="String" Name="nombreAB" Nullable="false" MaxLength="25" />
+    <Property Type="Int32" Name="idTipoServicio" Nullable="false" />
+    <Property Type="String" Name="nombreTS" Nullable="false" MaxLength="25" />
+    <Property Type="String" Name="nombreServicio" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="descripcion" Nullable="true" MaxLength="Max" />
+    <Property Type="Double" Name="precio" Nullable="true" />
+    <Property Type="Int32" Name="tiempo" Nullable="true" />
+    <Property Type="String" Name="imagen" Nullable="true" MaxLength="Max" />
+    <Property Type="Boolean" Name="inactive" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="filtroServicioTS_Result">
+    <Property Type="Int32" Name="idServicio" Nullable="false" />
+    <Property Type="Int32" Name="idTipoAB" Nullable="false" />
+    <Property Type="String" Name="nombreAB" Nullable="false" MaxLength="25" />
+    <Property Type="Int32" Name="idTipoServicio" Nullable="false" />
+    <Property Type="String" Name="nombreTS" Nullable="false" MaxLength="25" />
+    <Property Type="String" Name="nombreServicio" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="descripcion" Nullable="true" MaxLength="Max" />
+    <Property Type="Double" Name="precio" Nullable="true" />
+    <Property Type="Int32" Name="tiempo" Nullable="true" />
+    <Property Type="String" Name="imagen" Nullable="true" MaxLength="Max" />
+    <Property Type="Boolean" Name="inactive" Nullable="true" />
   </ComplexType>
 </Schema>

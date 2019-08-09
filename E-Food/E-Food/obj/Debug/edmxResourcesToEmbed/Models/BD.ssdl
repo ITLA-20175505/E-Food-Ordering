@@ -14,7 +14,7 @@
       <PropertyRef Name="idMesa" />
     </Key>
     <Property Name="idMesa" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Nombre" Type="varchar" MaxLength="25" />
+    <Property Name="nombreMesa" Type="varchar" MaxLength="25" />
     <Property Name="inactive" Type="bit" />
   </EntityType>
   <EntityType Name="Orden">
@@ -34,7 +34,7 @@
     <Property Name="idServicio" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="idTipoAB" Type="int" Nullable="false" />
     <Property Name="idTipoServicio" Type="int" />
-    <Property Name="Nombre" Type="varchar" MaxLength="50" />
+    <Property Name="nombreServicio" Type="varchar" MaxLength="50" />
     <Property Name="descripcion" Type="text" />
     <Property Name="precio" Type="float" />
     <Property Name="tiempo" Type="int" />
@@ -43,10 +43,10 @@
   </EntityType>
   <EntityType Name="TipoAB">
     <Key>
-      <PropertyRef Name="idTipo" />
+      <PropertyRef Name="idTipoAB" />
     </Key>
-    <Property Name="idTipo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Nombre" Type="varchar" MaxLength="25" Nullable="false" />
+    <Property Name="idTipoAB" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="nombreAB" Type="varchar" MaxLength="25" Nullable="false" />
     <Property Name="inactive" Type="bit" />
   </EntityType>
   <EntityType Name="TipoServicio">
@@ -55,9 +55,21 @@
     </Key>
     <Property Name="idTipoServicio" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="idTipoAB" Type="int" Nullable="false" />
-    <Property Name="Nombre" Type="varchar" MaxLength="25" Nullable="false" />
+    <Property Name="nombreTS" Type="varchar" MaxLength="25" Nullable="false" />
     <Property Name="inactive" Type="bit" />
   </EntityType>
+  <Association Name="fk_DetalleOrden_idOrden">
+    <End Role="Orden" Type="Self.Orden" Multiplicity="1" />
+    <End Role="Detalle_Orden" Type="Self.Detalle_Orden" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Orden">
+        <PropertyRef Name="idOrden" />
+      </Principal>
+      <Dependent Role="Detalle_Orden">
+        <PropertyRef Name="idOrden" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="fk_DetalleOrden_idServicio">
     <End Role="Servicio" Type="Self.Servicio" Multiplicity="1" />
     <End Role="Detalle_Orden" Type="Self.Detalle_Orden" Multiplicity="*" />
@@ -87,7 +99,7 @@
     <End Role="Servicio" Type="Self.Servicio" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="TipoAB">
-        <PropertyRef Name="idTipo" />
+        <PropertyRef Name="idTipoAB" />
       </Principal>
       <Dependent Role="Servicio">
         <PropertyRef Name="idTipoAB" />
@@ -111,7 +123,7 @@
     <End Role="TipoServicio" Type="Self.TipoServicio" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="TipoAB">
-        <PropertyRef Name="idTipo" />
+        <PropertyRef Name="idTipoAB" />
       </Principal>
       <Dependent Role="TipoServicio">
         <PropertyRef Name="idTipoAB" />
@@ -218,6 +230,13 @@
     <Parameter Name="idTipoAB" Type="int" Mode="In" />
     <Parameter Name="nombre" Type="varchar" Mode="In" />
   </Function>
+  <Function Name="filtroServicioAB" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="idTipoAB" Type="int" Mode="In" />
+  </Function>
+  <Function Name="filtroServicioTS" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="idTipoServicio" Type="int" Mode="In" />
+  </Function>
+  <Function Name="verDetalleOrden" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
   <Function Name="verMesa" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
   <Function Name="verOrden" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
   <Function Name="verServicio" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
@@ -230,6 +249,10 @@
     <EntitySet Name="Servicio" EntityType="Self.Servicio" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="TipoAB" EntityType="Self.TipoAB" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="TipoServicio" EntityType="Self.TipoServicio" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="fk_DetalleOrden_idOrden" Association="Self.fk_DetalleOrden_idOrden">
+      <End Role="Orden" EntitySet="Orden" />
+      <End Role="Detalle_Orden" EntitySet="Detalle_Orden" />
+    </AssociationSet>
     <AssociationSet Name="fk_DetalleOrden_idServicio" Association="Self.fk_DetalleOrden_idServicio">
       <End Role="Servicio" EntitySet="Servicio" />
       <End Role="Detalle_Orden" EntitySet="Detalle_Orden" />

@@ -15,7 +15,7 @@ namespace E_Food.Models
     {
         public int idOrden { get; set; }
         public int idMesa { get; set; }
-        public string Nombre { get; set; }
+        public string nombreMesa { get; set; }
         public string Descripcion { get; set; }
         public Nullable<System.DateTime> fecha { get; set; }
     }
