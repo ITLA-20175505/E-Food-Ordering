@@ -19,11 +19,11 @@ namespace E_Food.Controllers
         {
             return View();
         }
-        public ActionResult AgregarDetalle()
+        public ActionResult ResumenOrdenes()
         {
             return View();
         }
-        [HttpPost]
+      
             public ActionResult AgregarDetalle(int idServicio, int cantidad, int idOrden)
             {
 

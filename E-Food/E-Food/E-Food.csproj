@@ -312,6 +312,7 @@
     <Content Include="Views\Servicio\Aves.cshtml" />
     <Content Include="Views\Servicio\Mariscos.cshtml" />
     <Content Include="Views\Servicio\View.cshtml" />
+    <Content Include="Views\Orden\ResumenOrdenes.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

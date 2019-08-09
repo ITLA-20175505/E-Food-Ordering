@@ -1,9 +1,6 @@
-﻿@model IEnumerable<E_Food.Models.Servicio>
-
+﻿@model IEnumerable<E_Food.Models.ViewModels.ViewDetalleOrden>
 @{
-                /**/
-
-                Layout = null;
+    Layout = null;
 }
 
 <!DOCTYPE html>
@@ -14,7 +11,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <title>Aves</title>
+    <title>Resumen de Orden</title>
 
     <!-- Bootstrap CSS CDN -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
@@ -41,7 +38,7 @@
             font-size: 1.1em;
             font-weight: 300;
             line-height: 1.7em;
-            color: black;
+            color: #999;
         }
 
         a,
@@ -277,31 +274,25 @@
             margin-left: 5px;
         }
 
-        #content > .row {
-            width: 100%;
+        .center {
             margin-bottom: 20px;
+        }
+
+        .tit-cen {
+            margin: auto;
+        }
+
+        .centrar {
+            width: 100%;
+        }
+
+        .centrar {
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
         }
 
         .btn {
             margin-left: 30px;
-        }
-
-        #container > .row > .carta {
-            margin-bottom: 20px;
-        }
-
-        .col-md-12 > .img-cont {
-            width: 30px;
-        }
-
-        .col-md-12 > .label {
-            font-family: 'Poppins', sans-serif;
-            font-size: 1.1em;
-            font-weight: 300;
-            line-height: 1.7em;
-            color: black;
         }
     </style>
 </head>
@@ -321,32 +312,31 @@
                     <a href="#homeSubmenu">Inicio</a>
                 </li>
                 <li>
-                    <a href="#homeSubmenu">
-                        @Html.ActionLink("Resumen de Orden", "ResumenOrdenes", "Orden")
-</li>
+                    <a href="#homeSubmenu">@Html.ActionLink("Resumen de Orden", "AgregarDetalle")</a>
+                </li>
                 <li>
-                    <a href="#homeSubmenu">Entradas</a>
+                    <a href="#homeSubmenu">@Html.ActionLink("Entradas", "Entradas", "Servicio")</a>
                 </li>
                 <li>
                     <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false"
                        class="dropdown-toggle">Platos Fuertes</a>
                     <ul class="collapse list-unstyled" id="pageSubmenu">
                         <li>
-                            <a href="#">Pasta</a>
+                            <a href="#">@Html.ActionLink("Pastas", "Pastas", "Servicio")</a>
                         </li>
                         <li>
-                            <a href="#">Carnes</a>
+                            <a href="#">@Html.ActionLink("Carnes", "Carnes", "Servicio")</a>
                         </li>
                         <li>
-                            <a href="#">Aves</a>
+                            <a href="#">@Html.ActionLink("Aves", "Aves", "Servicio")</a>
                         </li>
                     </ul>
                 </li>
                 <li>
-                    <a href="#">Ensalada</a>
+                    <a href="#">@Html.ActionLink("Ensaladas", "Ensaladas", "Servicio")</a>
                 </li>
                 <li>
-                    <a href="#">Bebida</a>
+                    <a href="#">@Html.ActionLink("Bebidas", "Bebidas", "Servicio")</a>
                 </li>
             </ul>
         </nav>
@@ -359,40 +349,65 @@
                     <span></span>
                     <span></span>
                 </button>
-                <h2 class="tit-cen">Aves</h2>
-                <form name="myform" action="Index.html" method="POST">
-                    <input type="submit" value="Realizar Pedido" class="btn btn-info">
-                </form>
+                <h2 class="tit-cen">Resumen de Orden</h2>
             </div>
 
-            <div id="container">
-                <div class="row">
-                    @foreach (var item in Model)
+            <table class="table">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col"></th>
+                        <th scope="col">Nombre</th>
+                        <th scope="col"> Cantidad</th>
+                        <th scope="col"> Precio</th>
+                        <th scope="col"> Subtotal</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                @{
+                    int total = 0;
+                }
+                <tbody>
+                    @if (Session["detalleOrden"] != null)
                     {
-                        <div class="col-lg-4 carta">
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    <h2>@Html.DisplayFor(modelItem => item.nombreServicio)</h2>
-                                </div>
-                                <div class="panel-body">
-                                    <img src=@Html.DisplayFor(modelItem => item.imagen)
-                                         alt="" class="img-thumbnail">
-                                    <p>@Html.DisplayFor(modelItem => item.idServicio)</p>
-                                    <p>@Html.DisplayFor(modelItem => item.precio)</p>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <button class="img-cont" type="button" class="btn btn-danger">-</button>
-                                            <label for="" style="margin: 0px 10px;" class="label">0</label>
-                                            <button class="img-cont" type="button" class="btn btn-danger">
-                                                @Html.ActionLink("+", "AgregarDetalle", "Orden", new { idServicio = item.idServicio, cantidad = 1, idOrden = 1 }, null)
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+
+                        foreach (var item in Session["detalleOrden"] as List<E_Food.Models.ViewModels.ViewDetalleOrden>)
+
+                        {
+                            total = total + (item.Cantidad * (int)item.servicio.precio);
+                            <tr>
+                                <td>
+                                    <img src="@Html.DisplayFor(modelItem => item.servicio.imagen)"
+                                         alt="" class="img-menu">
+                                </td>
+                                <td> @Html.DisplayFor(modelItem => item.servicio.nombreServicio)</td>
+                                <td> @Html.DisplayFor(modelItem => item.Cantidad)</td>
+                                <td>@Html.DisplayFor(modelItem => item.servicio.precio)</td>
+                                <td>@(item.servicio.precio * item.Cantidad)</td>
+
+                                <td>
+                                    @Html.ActionLink("Eliminar", "borrarDetalle", "Orden", new { idServicio = item.servicio.idServicio }, null)
+                                </td>
+                                <td>
+                                    @Html.ActionLink("Editar", "editarDetalle", "Orden", new { idServicio = item.servicio.idServicio, cantidad = 5 }, null)
+                                </td>
+                            </tr>
+                        }
                     }
-                </div>
+                    <tr>
+                        <td class="col-md-9" style="text-align: right !important;
+                        color: #fff;
+                        background-color: #212529;
+                        border-color: #32383e;" colspan="3">
+                            Total.:
+                        </td>
+                        <td class="col-md-3" style="text-align: left !important;" colspan="2">DOP $@total  </td>
+                    </tr>
+
+                </tbody>
+            </table>
+            <div class="centrar">
+                <button type="button" class="btn btn-success">Procesar</button>
+                <button type="button" class="btn btn-danger">Cancelar</button>
             </div>
         </div>
     </div>
